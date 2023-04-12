@@ -1,0 +1,21 @@
+import { Injectable } from '@angular/core';
+import { Usuario } from '../User/User';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class StorageService {
+
+  constructor() { }
+
+  getLocalStorage(chave:string){
+    let obj:Array<Usuario> =[];
+    let objJson = localStorage.getItem(chave);
+    obj = objJson ? JSON.parse(objJson):[];
+    return obj;
+  }
+
+  setLocalStorage(chave:string,obj:Array<Usuario>){
+    localStorage.setItem(chave,JSON.stringify(obj))
+  }
+}
