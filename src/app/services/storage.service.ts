@@ -18,4 +18,14 @@ export class StorageService {
   setLocalStorage(chave:string,obj:Array<Usuario>){
     localStorage.setItem(chave,JSON.stringify(obj))
   }
+
+  setUsuarioLogado(chave:string,obj:any){
+    localStorage.setItem(chave,JSON.stringify(obj))
+  }
+  getUsuarioLogado(chave:string){
+    let obj:any={};
+    let objJson = localStorage.getItem(chave);
+    obj = objJson ? JSON.parse(objJson):{};
+    return obj;
+  }
 }
