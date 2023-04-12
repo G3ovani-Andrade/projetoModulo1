@@ -58,7 +58,8 @@ export class LoginComponent implements OnInit {
     if (this.checarUsuario(this.usuarios,this.loginFormModel,'login')) {
       this.mensagem = 'Usuário ou senha inválido'
     } else {
-      this.rotas.navigate(['/home'])
+      this.storage.setUsuarioLogado('USUARIOS_LOGADO', this.loginFormModel);
+      //this.rotas.navigate(['/home']);
     }
   }
 
