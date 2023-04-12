@@ -45,14 +45,6 @@ export class LoginComponent implements OnInit {
       senha: "",
     }
   }
-
-  checar() {
-    this.maiuscula = /^(?=.*[A-Z])/.test(this.loginFormModel.senha);
-    this.minuscula = /^(?=.*[a-z])/.test(this.loginFormModel.senha);
-    this.numero = /^(?=.*[0-9])/.test(this.loginFormModel.senha);
-    this.especial = /^(?=.*[!@#$%^&*()_+\-=[\]{};'¨:"\|,.<>/?])/.test(this.loginFormModel.senha);
-  }
-
   login() {
     this.limparMensagem();
     if(!this.verificarEmail(this.loginFormModel.email)){
@@ -71,7 +63,8 @@ export class LoginComponent implements OnInit {
   }
 
   verificarEmail(email: string){
-    let emailRegex = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/
+    let emailRegex = /^([a-z]){1,}([a-z0-9._-]){1,}([@]){1}([a-z]){2,}([.]){1}([a-z]){2,}([.]?){1}([a-z]?){2,}([.]?){1}([a-z]?){2,}$/i;
+    console.log(emailRegex.test(email))
     return emailRegex.test(email);
   }
 
