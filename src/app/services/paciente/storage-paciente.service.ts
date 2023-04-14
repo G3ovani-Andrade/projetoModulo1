@@ -11,10 +11,18 @@ export class StoragePacienteService {
 
   setPacientes(chave: string, paciente: any) {
     let pacientes = this.getPacientes(chave);
-    let checarPaciente;
     if (paciente.id == null) {
       paciente.id = this.id;
       this.atualizarId();
+    }else{
+      pacientes.forEach((element: any, index: number) => {
+        if (element.id == paciente.id) {
+          pacientes[index] = paciente;
+        }
+      });
+      console.log(pacientes);
+      localStorage.setItem(chave, JSON.stringify(pacientes));
+      return;
     }
     pacientes.push(paciente);
     localStorage.setItem(chave, JSON.stringify(pacientes));
@@ -29,9 +37,8 @@ export class StoragePacienteService {
     var pacientes = this.getPacientes('PACIENTES');
     if(pacientes.length != 0){
       this.id = pacientes[pacientes.length - 1].id + 1
-    console.log(this.id);
+      console.log(this.id);
     }
-
   }
 
   deletarPaciente(chave: string, paciente: any) {
@@ -45,16 +52,16 @@ export class StoragePacienteService {
     this.atualizarId();
   }
 
-  editarPaciente(chave: string, paciente: any) {
-    console.log(paciente.id);
-    let pacientes = this.getPacientes(chave);
-    pacientes.forEach((element: any, index: number) => {
-      if (element.id == paciente.id) {
-        pacientes[index] = paciente;
-      }
-    });
-    console.log(pacientes);
-    localStorage.setItem(chave, JSON.stringify(pacientes));
-  }
+  // editarPaciente(chave: string, paciente: any) {
+  //   console.log(paciente.id);
+  //   let pacientes = this.getPacientes(chave);
+  //   pacientes.forEach((element: any, index: number) => {
+  //     if (element.id == paciente.id) {
+  //       pacientes[index] = paciente;
+  //     }
+  //   });
+  //   console.log(pacientes);
+  //   localStorage.setItem(chave, JSON.stringify(pacientes));
+  // }
 
 }

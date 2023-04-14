@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { StoragePacienteService } from '../services/paciente/storage-paciente.service';
 import { ActivatedRoute } from '@angular/router';
+import { ServiceCepService } from '../services/cep/service-cep.service';
 
 @Component({
   selector: 'app-cadastro-paciente',
@@ -11,54 +12,43 @@ import { ActivatedRoute } from '@angular/router';
 export class CadastroPacienteComponent implements OnInit {
   id: string = ''
   pacienteUrl: any = {};
-  endereco = {
-        cep: '88045300',
-        cidade: 'floripa',
-        estado: 'sc',
-        logradouro: 'servidao andrade',
-        numero: '27',
-        complemento: 'cada',
-        bairro: 'saco dos limoes',
-        referencia: 'ponto final',
-  }
+  erroCep = false;
+  mensagem: string = '';
 
-    form = this.fb.group({
-      id: [null],
-      nome: ['', { validators: [Validators.required, Validators.maxLength(80), Validators.minLength(4)] }],
-      genero: ['', { validators: [Validators.required] }],
-      data: ['', { validators: [Validators.required] }],
-      cpf: ['', { validators: [Validators.required] }],
-      rg: ['', { validators: [Validators.required, Validators.maxLength(20)] }],
-      estadoCivil: ['', { validators: [Validators.required] }],
-      telefone: ['', { validators: [Validators.required] }],
-      email: ['', { validators: [Validators.email] }],
-      naturalidade: ['', { validators: [Validators.required, Validators.maxLength(100), Validators.minLength(5)] }],
-      emergencia: ['', { validators: [Validators.required] }],
-      convenio: ['Sem convênio'],
-      carteira: [''],
-      validade: [''],
-      endereco: this.fb.group({
-        cep: ['', { validators: [Validators.required] }],
-        cidade: ['', { validators: [Validators.required] }],
-        estado: ['', { validators: [Validators.required] }],
-        logradouro: ['', { validators: [Validators.required] }],
-        numero: ['', { validators: [Validators.required] }],
-        complemento: ['', { validators: [Validators.required] }],
-        bairro: ['', { validators: [Validators.required] }],
-        referencia: ['', { validators: [Validators.required] }],
-      })
-    });
+  form = this.fb.group({
+    id: [null],
+    nome: ['', { validators: [Validators.required, Validators.maxLength(80), Validators.minLength(4)] }],
+    genero: ['', { validators: [Validators.required] }],
+    data: ['', { validators: [Validators.required] }],
+    cpf: ['', { validators: [Validators.required] }],
+    rg: ['', { validators: [Validators.required, Validators.maxLength(20)] }],
+    estadoCivil: ['', { validators: [Validators.required] }],
+    telefone: ['', { validators: [Validators.required] }],
+    email: ['', { validators: [Validators.email] }],
+    naturalidade: ['', { validators: [Validators.required, Validators.maxLength(100), Validators.minLength(5)] }],
+    emergencia: ['', { validators: [Validators.required] }],
+    convenio: ['Sem convênio'],
+    carteira: [''],
+    validade: [''],
+    cep: ['', { validators: [Validators.required] }],
+    localidade: ['', { validators: [Validators.required] }],
+    uf: ['', { validators: [Validators.required] }],
+    logradouro: ['', { validators: [Validators.required] }],
+    numero: ['', { validators: [Validators.required] }],
+    complemento: ['',],
+    bairro: ['', { validators: [Validators.required] }],
+    referencia: ['', ],
+  });
 
 
 
 
 
-  constructor(private fb: FormBuilder, private storagePacientes: StoragePacienteService, private rota: ActivatedRoute) {
-    this.atualizaIdUrl()
-
+  constructor(private fb: FormBuilder, private storagePacientes: StoragePacienteService, private rota: ActivatedRoute, private api: ServiceCepService) {
+    this.atualizaIdUrl();
   }
   @ViewChild('formPaciente')
-  formLogin!: NgForm;
+  formPaciente!: NgForm;
   ngOnInit(): void {
 
   }
@@ -68,14 +58,12 @@ export class CadastroPacienteComponent implements OnInit {
       this.id = params['id'];
     })
     if(this.id){
-      this.form.get('cpf')?.disable()
+      this.form.disable();
     }
     let pacientes = this.storagePacientes.getPacientes('PACIENTES');
     pacientes.find((paciente: any) => {
       if (paciente.id == this.id) {
-        this.form.setValue(paciente)
-        console.log(this.form);
-
+        this.form.patchValue(paciente)
         //this.form.setValue(this.endereco);
       }
     })
@@ -107,41 +95,71 @@ export class CadastroPacienteComponent implements OnInit {
   // }
 
 
-
-
+  pegarCep() {
+    if (this.form.value.cep!.length >= 8) {
+      this.api.getEndereco(this.form.value.cep!).subscribe((e) => {
+        console.log(e);
+        if (!e.erro) {
+          this.form.patchValue(e)
+        } else {
+          this.erroCep = true
+          this.limparMensagens()
+        }
+      });
+    }
+    console.log(this.form.value);
+  }
+  limparMensagens() {
+    setTimeout(() => {
+      this.erroCep = false
+      this.mensagem = '';
+    }, 2000);
+  }
   cadastrar() {
-    if (this.formLogin.invalid) {
+    this.limparMensagens()
+    if (this.formPaciente.invalid) {
+      console.log('invalid');
       return;
     }
     let pacientes = this.storagePacientes.getPacientes('PACIENTES');
     let checarPaciente = pacientes.find((pac: any) => pac.cpf === this.form.value.cpf);
-    if (checarPaciente) {
-      console.log('cpf ja cadastrado');
-    } else {
-      console.log('salvo');
+    console.log(this.form.value.id);
+    if(this.form.value.id != null && this.formPaciente.disabled == false){
+      let checarIgualdade = pacientes.find((pac: any) => JSON.stringify(pac) === JSON.stringify(this.form.value));
+      if(checarIgualdade){
+        this.mensagem = 'Nenhum campo alterado'
+      }else{
+        this.storagePacientes.setPacientes('PACIENTES', this.form.value);
+        this.mensagem = 'Editado com sucesso';
+      }
+      return;
+    }
+    if (checarPaciente && this.formPaciente.disabled == false) {
+      this.mensagem = 'CPF já cadastrado';
+    } else if(this.formPaciente.disabled == false) {
+      this.mensagem = 'Cadastrado com sucesso';
       this.storagePacientes.setPacientes('PACIENTES', this.form.value);
-      this.formLogin.resetForm();
+      this.formPaciente.resetForm();
     }
   }
 
   deletar() {
     this.storagePacientes.deletarPaciente('PACIENTES', this.form.value);
-    this.formLogin.resetForm();
+    this.formPaciente.resetForm();
+    this.mensagem = 'Paciente excluido';
+    this.limparMensagens();
   }
   editar() {
-    let pacientes = this.storagePacientes.getPacientes('PACIENTES');
-    let checarPaciente = pacientes.find((pac: any) => pac.cpf === this.form.value.cpf && pac.id === this.form.value.id);
-    let checarIgualdade = pacientes.find((pac: any) => JSON.stringify(pac) === JSON.stringify(this.form.value));
-    if (checarIgualdade) {
-      console.log('nenhum campo alterado');
-      return;
-    }
-    if (checarPaciente) {
-      this.storagePacientes.editarPaciente('PACIENTES', this.form.value);
-      //this.formLogin.resetForm();
-    } else {
-      console.log('cpf ja cadastrado');
-    }
+    // this.limparMensagens();
+    // let pacientes = this.storagePacientes.getPacientes('PACIENTES');
+    // let checarIgualdade = pacientes.find((pac: any) => JSON.stringify(pac) === JSON.stringify(this.form.value));
+    // if (checarIgualdade) {
+    //   this.mensagem = 'Nenhum campo alterado';
+    //   this.storagePacientes.editarPaciente('PACIENTES', this.form.value);
+    //   return;
+    // }
+    //this.formLogin.resetForm();
+    this.form.enable();
   }
 }
 
