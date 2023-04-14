@@ -25,7 +25,7 @@
         </div>
         <div class="col-3">
           <label for="nascimento" class="form-label">Data nascimento</label>
-          <input type="text" name="nascimento" class="form-control" id="nascimento" formControlName="data">
+          <input type="" name="nascimento"  class="form-control" id="nascimento" formControlName="data">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted" >
             <p class="mb-0" *ngIf="form.get('data')?.errors?.['required']">Campo não pode ser vazio</p>
           </div>
@@ -115,7 +115,7 @@
       </div>
     </div>
     <!--  -->
-    <div class="mt-4">
+    <div class="mt-4" formGroupName="endereco">
       <h5>Endereço</h5>
       <div class="row">
         <div class="col-4">
@@ -175,7 +175,7 @@
       </div>
       <div class="row mt-5">
         <div class="col-5 m-auto">
-            <button type="submit" [disabled]="form.value.id" class="btn btn-success me-3">Cadastrar</button>
+            <button type="submit" [disabled]="form.value.id != undefined" class="btn btn-success me-3">Cadastrar</button>
             <button type="button" [disabled]="form.value.id == null" (click)="editar()" class="btn btn-warning me-3">Editar</button>
             <button type="button" [disabled]="form.value.id == null" (click)="deletar()" class="btn btn-danger">Excluir</button>
         </div>
