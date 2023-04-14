@@ -8,7 +8,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class CadastroPacienteComponent implements OnInit{
   constructor(private fb : FormBuilder){
-    this.form.setValue(this.paciente2);
+   this.form.setValue(this.paciente2);
   }
   ngOnInit(): void {
     //this.form.setValue(this.paciente2);
@@ -68,7 +68,5 @@ export class CadastroPacienteComponent implements OnInit{
     this.paciente = this.form.value;
     console.log(this.paciente);
     console.log(this.form.value);
-
-
   }
 }
