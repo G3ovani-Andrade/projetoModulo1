@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, AbstractControl, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, AbstractControl, NgForm, Validators, FormArray } from '@angular/forms';
 import { StoragePacienteService } from '../services/paciente/storage-paciente.service';
 import { ActivatedRoute } from '@angular/router';
 import { ServiceCepService } from '../services/cep/service-cep.service';
@@ -17,6 +17,7 @@ export class CadastroPacienteComponent implements OnInit {
   botao: string = 'Cadastrar'
   @ViewChild('formPaciente')
   formPaciente!: NgForm;
+
 
   form = this.fb.group({
     id: [null],
@@ -41,7 +42,36 @@ export class CadastroPacienteComponent implements OnInit {
     complemento: ['',],
     bairro: ['', { validators: [Validators.required] }],
     referencia: ['',],
+    alergias: this.fb.array([]),
+    cuidados: this.fb.array([])
   });
+  // Alergias
+  get alergias(){
+    return this.form.controls["alergias"] as FormArray;
+  }
+  adicionarAlergias(){
+    let alergiaForm = this.fb.group({
+      tipo: [''],
+    });
+    this.alergias.push(alergiaForm);
+  }
+  excluirAlergia(index:number){
+    this.alergias.removeAt(index);
+  }
+// Cudidados
+  get cuidados(){
+    return this.form.controls["cuidados"] as FormArray;
+  }
+  adicionarCuidado(){
+    let cuidadoForm = this.fb.group({
+      tipo: [''],
+    });
+    this.cuidados.push(cuidadoForm);
+  }
+  excluirCuidado(index:number){
+    this.cuidados.removeAt(index);
+  }
+
 
   validarData(controle: AbstractControl) {
     let data = controle.value;
@@ -84,16 +114,29 @@ export class CadastroPacienteComponent implements OnInit {
     this.rota.queryParams.subscribe(params => {
       this.id = params['id'];
     })
-    if (this.id) {
-      this.form.disable();
-    }
+
     let pacientes = this.storagePacientes.getPacientes('PACIENTES');
     pacientes.find((paciente: any) => {
       if (paciente.id == this.id) {
-        this.form.patchValue(paciente)
-        //this.form.setValue(this.endereco);
+        this.form.patchValue(paciente);
+        paciente.alergias.forEach((alergia:any) => {
+          let alergiaForm = this.fb.group({
+            tipo: [alergia.tipo],
+          });
+          this.alergias.push(alergiaForm);
+        });
+        paciente.cuidados.forEach((cuidado:any) => {
+          let cuidadosForm = this.fb.group({
+            tipo: [cuidado.tipo],
+          });
+          this.cuidados.push(cuidadosForm);
+        });
       }
     })
+    if(this.id) {
+      this.form.disable();
+    }
+
   }
 
   // paciente2: any = {

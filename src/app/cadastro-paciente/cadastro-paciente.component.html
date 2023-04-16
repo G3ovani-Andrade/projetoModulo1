@@ -26,7 +26,8 @@
         </div>
         <div class="col-sm-6 col-lg-3 col-md-4">
           <label for="nascimento" class="form-label">Data nascimento</label>
-          <input type="text" name="nascimento" class="form-control" id="nascimento" formControlName="data"  mask="00/00/0000" [validation]="true">
+          <input type="text" name="nascimento" class="form-control" id="nascimento" formControlName="data"
+            mask="00/00/0000" [validation]="true">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('data')?.errors?.['required']">Campo não pode ser vazio</p>
             <p class="mb-0" *ngIf="form.get('data')?.hasError('invalido')">Data inválida</p>
@@ -37,7 +38,7 @@
       <div class="row mt-2">
         <div class="col-sm-6 col-lg-4 col-md-4">
           <label for="cpf" name="cpf" class="form-label">CPF</label>
-          <input  type="text" class="form-control" id="cpf" formControlName="cpf" mask="000.000.000-00">
+          <input type="text" class="form-control" id="cpf" formControlName="cpf" mask="000.000.000-00">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('cpf')?.errors?.['required']">Campo não pode ser vazio</p>
           </div>
@@ -67,7 +68,8 @@
       <div class="row mt-2">
         <div class="col-sm-6 col-lg-4 col-md-4">
           <label for="telefone" name="telefone" class="form-label">Telefone</label>
-          <input type="text" class="form-control" id="telefone" formControlName="telefone"  mask="(00) 0 0000-0000" [validation]="true">
+          <input type="text" class="form-control" id="telefone" formControlName="telefone" mask="(00) 0 0000-0000"
+            [validation]="true">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('telefone')?.errors?.['required']">Campo não pode ser vazio</p>
           </div>
@@ -92,10 +94,51 @@
       <div class="row mt-2">
         <div class="col-sm-6 col-lg-4 col-md-4">
           <label for="contEmergencia" name="contEmergencia" class="form-label">Contato de emergência</label>
-          <input type="text" class="form-control" id="contEmergencia" formControlName="emergencia" mask="(00) 0 0000-0000" [validation]="true">
+          <input type="text" class="form-control" id="contEmergencia" formControlName="emergencia"
+            mask="(00) 0 0000-0000" [validation]="true">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('emergencia')?.errors?.['required']">Campo não pode ser vazio</p>
           </div>
+        </div>
+      </div>
+    </div>
+    <!-- Alergias -->
+    <div formArrayName="alergias" class="mt-4">
+      <h5>Alergias</h5>
+      <div class="row mt-2 align-items-end" *ngFor="let alergia of alergias.controls;let i=index" [formGroupName]="i">
+        <div class="col-sm-10 col-lg-10 col-md-10" >
+          <label for="contEmergencia"  class="form-label">Alergia {{i+1}}</label>
+          <input class="form-control" formControlName="tipo" />
+        </div>
+        <div class="col-sm-2 col-lg-2 col-md-2">
+          <button (click)="excluirAlergia(i)" [disabled]="formPaciente.disabled == true" class="btn btn-danger mt-3 me-3"
+            type="button">Excluir</button>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6 col-lg-3 col-md-4">
+          <button (click)="adicionarAlergias()" [disabled]="formPaciente.disabled == true" class="btn btn-success me-3"
+            type="button">Adicionar</button>
+        </div>
+      </div>
+    </div>
+    <!-- cuidados especificos -->
+    <div formArrayName="cuidados" class="mt-4">
+      <h5>Cuidados Específicos</h5>
+      <div class="row mt-2 align-items-end" *ngFor="let cuidado of cuidados.controls;let i=index" [formGroupName]="i">
+        <div class="col-sm-10 col-lg-10 col-md-10">
+          <label for="contEmergencia" name="contEmergencia" class="form-label">Cuidado específico {{i+1}}</label>
+          <input class="form-control" formControlName="tipo" />
+        </div>
+        <div class="col-sm-2 col-lg-2 col-md-2">
+          <button (click)="excluirCuidado(i)" [disabled]="formPaciente.disabled == true" class="btn btn-danger mt-3 me-3"
+            type="button">Excluir</button>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6 col-lg-3 col-md-4">
+          <button (click)="adicionarCuidado()" [disabled]="formPaciente.disabled == true" class="btn btn-success me-3"
+            type="button">Adicionar</button>
         </div>
       </div>
     </div>
@@ -118,12 +161,13 @@
       </div>
     </div>
     <!--  -->
-    <div class="mt-4" >
+    <div class="mt-4">
       <h5>Endereço</h5>
       <div class="row">
         <div class="col-sm-6 col-lg-3 col-md-4">
           <label for="cep" class="form-label">Cep</label>
-          <input (keyup)="pegarCep()" type="text" name="cep" class="form-control" id="cep" formControlName="cep" mask="00.000-000" >
+          <input (keyup)="pegarCep()" type="text" name="cep" class="form-control" id="cep" formControlName="cep"
+            mask="00.000-000">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('cep')?.errors?.['required']">Campo não pode ser vazio</p>
           </div>
@@ -182,7 +226,7 @@
           <p class="badge bg-danger text-wrap mb-0 text-center" *ngIf="true">{{mensagem}}</p>
         </div>
       </div>
-<!-- botoes -->
+      <!-- botoes -->
       <div class="row mt-2">
         <div class="col-sm-9 col-lg-6 col-md-6 m-auto text-center">
           <button type="submit" *ngIf="form.value.id == null" class="btn btn-success me-3">Cadastrar</button>
