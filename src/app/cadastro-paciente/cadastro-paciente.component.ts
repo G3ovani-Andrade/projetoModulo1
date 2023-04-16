@@ -111,7 +111,7 @@ export class CadastroPacienteComponent implements OnInit {
   }
 
   atualizaIdUrl() {
-    this.rota.queryParams.subscribe(params => {
+    this.rota.params.subscribe(params => {
       this.id = params['id'];
     })
 
