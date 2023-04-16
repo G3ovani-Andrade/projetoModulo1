@@ -9,21 +9,26 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente.component';
 import { HttpClientModule } from '@angular/common/http';
+import { IConfig, provideEnvironmentNgxMask,NgxMaskDirective } from 'ngx-mask';
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
-    CadastroPacienteComponent
+    CadastroPacienteComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxMaskDirective
   ],
-  providers: [],
+  providers: [
+    provideEnvironmentNgxMask()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

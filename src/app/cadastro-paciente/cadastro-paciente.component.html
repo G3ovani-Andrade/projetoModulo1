@@ -26,9 +26,10 @@
         </div>
         <div class="col-sm-6 col-lg-3 col-md-4">
           <label for="nascimento" class="form-label">Data nascimento</label>
-          <input type="text" name="nascimento" class="form-control" id="nascimento" formControlName="data">
+          <input type="text" name="nascimento" class="form-control" id="nascimento" formControlName="data"  mask="00/00/0000" [validation]="true">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('data')?.errors?.['required']">Campo não pode ser vazio</p>
+            <p class="mb-0" *ngIf="form.get('data')?.hasError('invalido')">Data inválida</p>
           </div>
         </div>
       </div>
@@ -36,14 +37,14 @@
       <div class="row mt-2">
         <div class="col-sm-6 col-lg-4 col-md-4">
           <label for="cpf" name="cpf" class="form-label">CPF</label>
-          <input type="text" class="form-control" id="cpf" formControlName="cpf">
+          <input  type="text" class="form-control" id="cpf" formControlName="cpf" mask="000.000.000-00">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('cpf')?.errors?.['required']">Campo não pode ser vazio</p>
           </div>
         </div>
         <div class="col-sm-6 col-lg-4 col-md-4">
           <label for="rg" name="rg" class="form-label">RG</label>
-          <input type="text" class="form-control" id="rg" formControlName="rg">
+          <input type="text" class="form-control" id="rg" formControlName="rg" placeholder="RG-expedidor">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('rg')?.errors?.['required']">Campo não pode ser vazio</p>
           </div>
@@ -66,7 +67,7 @@
       <div class="row mt-2">
         <div class="col-sm-6 col-lg-4 col-md-4">
           <label for="telefone" name="telefone" class="form-label">Telefone</label>
-          <input type="text" class="form-control" id="telefone" formControlName="telefone">
+          <input type="text" class="form-control" id="telefone" formControlName="telefone"  mask="(00) 0 0000-0000" [validation]="true">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('telefone')?.errors?.['required']">Campo não pode ser vazio</p>
           </div>
@@ -91,7 +92,7 @@
       <div class="row mt-2">
         <div class="col-sm-6 col-lg-4 col-md-4">
           <label for="contEmergencia" name="contEmergencia" class="form-label">Contato de emergência</label>
-          <input type="text" class="form-control" id="contEmergencia" formControlName="emergencia">
+          <input type="text" class="form-control" id="contEmergencia" formControlName="emergencia" mask="(00) 0 0000-0000" [validation]="true">
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('emergencia')?.errors?.['required']">Campo não pode ser vazio</p>
           </div>
@@ -122,7 +123,7 @@
       <div class="row">
         <div class="col-sm-6 col-lg-3 col-md-4">
           <label for="cep" class="form-label">Cep</label>
-          <input (keyup)="pegarCep()" type="text" name="cep" class="form-control" id="cep" formControlName="cep">
+          <input (keyup)="pegarCep()" type="text" name="cep" class="form-control" id="cep" formControlName="cep" mask="00.000-000" >
           <div class="badge bg-danger text-wrap" *ngIf="formPaciente.submitted">
             <p class="mb-0" *ngIf="form.get('cep')?.errors?.['required']">Campo não pode ser vazio</p>
           </div>
@@ -184,7 +185,8 @@
 <!-- botoes -->
       <div class="row mt-2">
         <div class="col-sm-9 col-lg-6 col-md-6 m-auto text-center">
-          <button type="submit" class="btn btn-success me-3">Cadastrar</button>
+          <button type="submit" *ngIf="form.value.id == null" class="btn btn-success me-3">Cadastrar</button>
+          <button type="submit" *ngIf="form.value.id != null" class="btn btn-success me-3">Salvar</button>
           <button type="button" [disabled]="form.value.id == null" (click)="editar()"
             class="btn btn-warning me-3">Editar</button>
           <button type="button" [disabled]="form.value.id == null" (click)="deletar()"

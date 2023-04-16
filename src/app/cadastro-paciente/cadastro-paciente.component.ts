@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, AbstractControl, NgForm, Validators } from '@angular/forms';
 import { StoragePacienteService } from '../services/paciente/storage-paciente.service';
 import { ActivatedRoute } from '@angular/router';
 import { ServiceCepService } from '../services/cep/service-cep.service';
@@ -14,12 +14,15 @@ export class CadastroPacienteComponent implements OnInit {
   pacienteUrl: any = {};
   erroCep = false;
   mensagem: string = '';
+  botao: string = 'Cadastrar'
+  @ViewChild('formPaciente')
+  formPaciente!: NgForm;
 
   form = this.fb.group({
     id: [null],
     nome: ['', { validators: [Validators.required, Validators.maxLength(80), Validators.minLength(4)] }],
     genero: ['', { validators: [Validators.required] }],
-    data: ['', { validators: [Validators.required] }],
+    data: ['', Validators.compose([Validators.required, this.validarData])],
     cpf: ['', { validators: [Validators.required] }],
     rg: ['', { validators: [Validators.required, Validators.maxLength(20)] }],
     estadoCivil: ['', { validators: [Validators.required] }],
@@ -37,18 +40,42 @@ export class CadastroPacienteComponent implements OnInit {
     numero: ['', { validators: [Validators.required] }],
     complemento: ['',],
     bairro: ['', { validators: [Validators.required] }],
-    referencia: ['', ],
+    referencia: ['',],
   });
 
+  validarData(controle: AbstractControl) {
+    let data = controle.value;
+    if (data) {
+      if (controle.value.length <= 8) {
+        let dia = data.slice(0, 2);
+        let mes = data.slice(2, 4);
+        let ano = data.slice(4, 8)
+        if (dia <= 0 || dia > 31) {
+          return { invalido: true }
+        } else if (mes <= 0 || mes > 12) {
+          return { invalido: true }
+        } else if (ano == 0 || ano > 2023 || ano.length < 4) {
+          return { invalido: true }
+        }
+        if((mes == 4 || mes ==6 || mes == 9 || mes == 11) && dia>30){
+          return { invalido: true }
+        }else if(mes==2 && dia>28){
+          return { invalido: true }
+        }
+      }
+    }
 
+
+    return null;
+
+  }
 
 
 
   constructor(private fb: FormBuilder, private storagePacientes: StoragePacienteService, private rota: ActivatedRoute, private api: ServiceCepService) {
     this.atualizaIdUrl();
   }
-  @ViewChild('formPaciente')
-  formPaciente!: NgForm;
+
   ngOnInit(): void {
 
   }
@@ -57,7 +84,7 @@ export class CadastroPacienteComponent implements OnInit {
     this.rota.queryParams.subscribe(params => {
       this.id = params['id'];
     })
-    if(this.id){
+    if (this.id) {
       this.form.disable();
     }
     let pacientes = this.storagePacientes.getPacientes('PACIENTES');
@@ -107,7 +134,6 @@ export class CadastroPacienteComponent implements OnInit {
         }
       });
     }
-    console.log(this.form.value);
   }
   limparMensagens() {
     setTimeout(() => {
@@ -116,6 +142,7 @@ export class CadastroPacienteComponent implements OnInit {
     }, 2000);
   }
   cadastrar() {
+    console.log(this.form.value);
     this.limparMensagens()
     if (this.formPaciente.invalid) {
       console.log('invalid');
@@ -124,11 +151,11 @@ export class CadastroPacienteComponent implements OnInit {
     let pacientes = this.storagePacientes.getPacientes('PACIENTES');
     let checarPaciente = pacientes.find((pac: any) => pac.cpf === this.form.value.cpf);
     console.log(this.form.value.id);
-    if(this.form.value.id != null && this.formPaciente.disabled == false){
+    if (this.form.value.id != null && this.formPaciente.disabled == false) {
       let checarIgualdade = pacientes.find((pac: any) => JSON.stringify(pac) === JSON.stringify(this.form.value));
-      if(checarIgualdade){
+      if (checarIgualdade) {
         this.mensagem = 'Nenhum campo alterado'
-      }else{
+      } else {
         this.storagePacientes.setPacientes('PACIENTES', this.form.value);
         this.mensagem = 'Editado com sucesso';
       }
@@ -136,7 +163,7 @@ export class CadastroPacienteComponent implements OnInit {
     }
     if (checarPaciente && this.formPaciente.disabled == false) {
       this.mensagem = 'CPF já cadastrado';
-    } else if(this.formPaciente.disabled == false) {
+    } else if (this.formPaciente.disabled == false) {
       this.mensagem = 'Cadastrado com sucesso';
       this.storagePacientes.setPacientes('PACIENTES', this.form.value);
       this.formPaciente.resetForm();
@@ -147,6 +174,7 @@ export class CadastroPacienteComponent implements OnInit {
     this.storagePacientes.deletarPaciente('PACIENTES', this.form.value);
     this.formPaciente.resetForm();
     this.mensagem = 'Paciente excluido';
+    this.formPaciente.disabled;
     this.limparMensagens();
   }
   editar() {
