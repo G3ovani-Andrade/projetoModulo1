@@ -1,0 +1,8 @@
+<div class="row justify-content-center">
+  <div class="col-sm-10">
+    <input type="text" id="pesquisarPaciente" name="pesquisarPaciente" class="form-control" [(ngModel)]="valorBusca"  mask="" placeholder="Nome,Telefone ou Email">
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-primary" (click)="enviarValorBusca()" >Pesquisar</button>
+  </div>
+</div>
