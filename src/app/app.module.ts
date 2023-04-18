@@ -11,6 +11,7 @@ import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente
 import { HttpClientModule } from '@angular/common/http';
 import { provideEnvironmentNgxMask,NgxMaskDirective } from 'ngx-mask';
 import { PesquisaComponent } from './components/pesquisa/pesquisa.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { PesquisaComponent } from './components/pesquisa/pesquisa.component';
     HomeComponent,
     CadastroPacienteComponent,
     PesquisaComponent,
+    ToolbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,10 +28,10 @@ import { PesquisaComponent } from './components/pesquisa/pesquisa.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxMaskDirective
+    NgxMaskDirective,
   ],
   providers: [
-    provideEnvironmentNgxMask()
+    provideEnvironmentNgxMask(),
   ],
   bootstrap: [AppComponent]
 })

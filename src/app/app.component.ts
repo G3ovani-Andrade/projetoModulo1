@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'projetoModulo1';
+  titulo ="Estatisticas e Informacoes"
+  pegarTitulo(event:string){
+    this.titulo = event;
+    console.log(event);
+  }
 }

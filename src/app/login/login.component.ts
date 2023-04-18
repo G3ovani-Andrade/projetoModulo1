@@ -17,8 +17,11 @@ export class LoginComponent implements OnInit {
   especial: boolean = false;
   usuarios: any = [];
   confirmarSenha:string ="";
-  mensagemCadastro:string=""
-  constructor(private storage: StorageService,private rotas : Router) { }
+  mensagemCadastro:string="";
+  usuarioLogado:any={};
+  constructor(private storage: StorageService,private rotas : Router) {
+    this.usuarioLogado = this.storage.getUsuarioLogado('USUARIO_LOGADO');
+  }
 
   mensagem: string = ''
   loginFormModel: Usuario = {
@@ -30,6 +33,10 @@ export class LoginComponent implements OnInit {
     senha: ''
   }
   ngOnInit() {
+
+    if(this.usuarioLogado.length>0){
+      this.rotas.navigate(['']);
+    }
     this.criarFormLogin();
     this.criarFormCadastro();
   }
@@ -58,14 +65,13 @@ export class LoginComponent implements OnInit {
     if (this.checarUsuario(this.usuarios,this.loginFormModel,'login')) {
       this.mensagem = 'Usuário ou senha inválido'
     } else {
-      this.storage.setUsuarioLogado('USUARIOS_LOGADO', this.loginFormModel);
-      //this.rotas.navigate(['/home']);
+      this.storage.setUsuarioLogado('USUARIO_LOGADO', this.loginFormModel);
+      this.rotas.navigate(['']);
     }
   }
 
   verificarEmail(email: string){
     let emailRegex = /^([a-z]){1,}([a-z0-9._-]){1,}([@]){1}([a-z]){2,}([.]){1}([a-z]){2,}([.]?){1}([a-z]?){2,}([.]?){1}([a-z]?){2,}$/i;
-    console.log(emailRegex.test(email))
     return emailRegex.test(email);
   }
 
