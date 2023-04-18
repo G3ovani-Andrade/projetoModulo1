@@ -6,7 +6,7 @@ import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente
 
 const routes: Routes = [
   {path: 'login', component:LoginComponent},
-  {path: '', component:CadastroPacienteComponent},
+  {path: '', component:HomeComponent},
   {path: 'cadastroPaciente', component:CadastroPacienteComponent},
   {path: 'cadastroPaciente/:id', component:CadastroPacienteComponent},
 ];

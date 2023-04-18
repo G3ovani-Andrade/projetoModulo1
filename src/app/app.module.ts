@@ -9,7 +9,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente.component';
 import { HttpClientModule } from '@angular/common/http';
-import { IConfig, provideEnvironmentNgxMask,NgxMaskDirective } from 'ngx-mask';
+import { provideEnvironmentNgxMask,NgxMaskDirective } from 'ngx-mask';
+import { PesquisaComponent } from './components/pesquisa/pesquisa.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { IConfig, provideEnvironmentNgxMask,NgxMaskDirective } from 'ngx-mask';
     LoginComponent,
     HomeComponent,
     CadastroPacienteComponent,
+    PesquisaComponent,
   ],
   imports: [
     BrowserModule,
