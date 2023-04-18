@@ -37,11 +37,9 @@ export class HomeComponent {
     let mesAtual = dataAtual.slice(3, 5);
     let anoAtual = dataAtual.slice(6, 10);
 
-
-
     idade = (parseInt(anoAtual) - parseInt(ano));
 
-    if(mesAtual<mes){
+    if(mesAtual<mes && diaAtual<dia){
       idade--;
     }
     return idade
