@@ -13,13 +13,17 @@ export class ToolbarComponent implements OnInit{
   @Input() titulo = ''
   constructor(private serviceLogin:StorageService,private route:Router,private rotaAtive:ActivatedRoute) {}
   ngOnInit(){
+    this.login = false
       this.usuarioLogado = this.serviceLogin.getUsuarioLogado('USUARIO_LOGADO');
-      console.log(this.usuarioLogado);
-      console.log();
+      if(this.usuarioLogado.email){
+        this.usuarioLogado.email = this.usuarioLogado.email.split("@",1)
+      }
       this.route.events.subscribe((event)=>{
         if(event  instanceof NavigationEnd){
-          if(event.url == "/login"){
-          this.login = true;
+          if(event.url == "/login" || event.url =="/"){
+            this.login = true;
+          }else{
+            this.login = false;
           }
         }
       })
