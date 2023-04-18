@@ -13,6 +13,7 @@ import { provideEnvironmentNgxMask,NgxMaskDirective } from 'ngx-mask';
 import { PesquisaComponent } from './components/pesquisa/pesquisa.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MenuLateralComponent } from './menu-lateral/menu-lateral.component';
+import { CadastroMedicamentosComponent } from './cadastro-medicamentos/cadastro-medicamentos.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { MenuLateralComponent } from './menu-lateral/menu-lateral.component';
     PesquisaComponent,
     ToolbarComponent,
     MenuLateralComponent,
+    CadastroMedicamentosComponent,
   ],
   imports: [
     BrowserModule,

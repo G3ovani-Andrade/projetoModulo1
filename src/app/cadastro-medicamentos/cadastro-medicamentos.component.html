@@ -1,0 +1,123 @@
+<div class="container w-75 mt-3 mb-5">
+  <div class="row">
+    <app-pesquisa (onClick)="pesquisa($event)"></app-pesquisa>
+    <div class="col-4 badge bg-danger text-wrap m-auto mt-2">
+      <p class="mb-0" *ngIf="mensagemBusca">{{mensagemBusca}}</p>
+    </div>
+  </div>
+  <form (ngSubmit)="cadastrar()" [formGroup]="formMedicamento" #formCadMed="ngForm">
+    <div class="row mt-3">
+      <div class="col-lg-12">
+        <ul class="list-group">
+          <div *ngFor="let paciente of pacientesLocal" class="mt-2">
+            <li class="list-group-item d-flex justify-content-between align-items-center" (click)="selecionarPaciente(paciente)">
+              <span class="rounded-pill">{{paciente.nome}}</span>
+              <span class="rounded-pill">{{paciente.cpf}}</span>
+              <span class="badge bg-primary rounded-pill">{{paciente.id}}</span>
+            </li>
+          </div>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-3">
+      <h3>Medicamento de {{pacienteSelecionado?.nome}}</h3>
+      <div class="row">
+        <div class="col-sm-6 col-lg-6 col-md-4">
+          <label for="nomemed" class="form-label">Nome Medicamento</label>
+          <input type="text" name="nomemed" class="form-control" id="nomemed" formControlName="nomeMedicamento">
+          <div class="badge bg-danger text-wrap" *ngIf="formCadMed.submitted">
+            <p class="mb-0" *ngIf="formMedicamento.get('nomeMedicamento')?.errors?.['required']">Campo não pode ser
+              vazio</p>
+            <p class="mb-0" *ngIf="formMedicamento.get('nomeMedicamento')?.errors?.['minlength']">Mínimo 8 caracteres
+            </p>
+            <p class="mb-0" *ngIf="formMedicamento.get('nomeMedicamento')?.errors?.['maxlength']">Maximo 80 caracteres
+            </p>
+          </div>
+        </div>
+        <div class="col-sm-2 col-lg-3 col-md-4">
+          <label for="data" class="form-label">Data</label>
+          <input type="text" name="data" class="form-control" id="data" mask="00/00/0000" formControlName="data">
+          <div class="badge bg-danger text-wrap" *ngIf="formCadMed.submitted">
+            <p class="mb-0" *ngIf="formMedicamento.get('data')?.errors?.['required']">Campo não pode ser vazio</p>
+            <p class="mb-0" *ngIf="formMedicamento.get('data')?.errors?.['minlength']">Mínimo 8 caracteres</p>
+          </div>
+        </div>
+        <div class="col-sm-2 col-lg-3 col-md-4">
+          <label for="hora" class="form-label">Hora</label>
+          <input type="text" name="hora" class="form-control" mask="Hh:m0:s0" id="hora" formControlName="hora">
+          <div class="badge bg-danger text-wrap" *ngIf="formCadMed.submitted">
+            <p class="mb-0" *ngIf="formMedicamento.get('hora')?.errors?.['required']">Campo não pode ser vazio</p>
+            <p class="mb-0" *ngIf="formMedicamento.get('hora')?.errors?.['minlength']">Mínimo 6 caracteres</p>
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <div class="row mt-2">
+        <div class="col-sm-6 col-lg-4 col-md-4">
+          <label for="tipo" class="form-label">Tipo</label>
+          <select name="tipo" class="form-select" id="tipo" aria-label="Default select example" formControlName="tipo">
+            <option selected value="">Tipo</option>
+            <option value="capsula">Cápsula</option>
+            <option value="comprimido">Comprimido</option>
+            <option value="líquido">Líquido</option>
+            <option value="creme">Creme</option>
+            <option value="gel">Gel</option>
+            <option value="inalação">Inalação</option>
+            <option value="injeção ">Injeção</option>
+            <option value="spray">Spray</option>
+          </select>
+          <div class="badge bg-danger text-wrap" *ngIf="formCadMed.submitted">
+            <p class="mb-0" *ngIf="formMedicamento.get('tipo')?.errors?.['required']">Campo não pode ser vazio</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-md-4">
+          <label for="quantidade" class="form-label">Quantidade</label>
+          <input type="text" name="quantidade" class="form-control" id="quantidade"
+          formControlName="quantidade" [mask]="'00,000'">
+          <div class="badge bg-danger text-wrap" *ngIf="formCadMed.submitted">
+            <p class="mb-0" *ngIf="formMedicamento.get('quantidade')?.errors?.['required']">Campo não pode ser vazio</p>
+            <p class="mb-0" *ngIf="formMedicamento.get('quantidade')?.errors?.['minlength']">quantidade mínima 1</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-md-4">
+          <label for="unidade" class="form-label">Unidade</label>
+          <select name="unidade" class="form-select" id="unidade" aria-label="Default select example"
+            formControlName="unidade">
+            <option selected value="">Unidade</option>
+            <option value="mg">mg</option>
+            <option value="mgc">mcg</option>
+            <option value="g">g</option>
+            <option value="mL">mL</option>
+            <option value="%">%</option>
+          </select>
+          <div class="badge bg-danger text-wrap" *ngIf="formCadMed.submitted">
+            <p class="mb-0" *ngIf="formMedicamento.get('unidade')?.errors?.['required']">Campo não pode ser vazio</p>
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <div class="row mt-2">
+        <div class="col-sm-12 col-lg-12 col-md-12">
+          <label for="observacoes" class="form-label">Observações</label>
+          <textarea type="text" name="quantidade" class="form-control" rows="4" id="observacoes"
+            formControlName="observacoes"></textarea>
+          <div class="badge bg-danger text-wrap" *ngIf="formCadMed.submitted">
+            <p class="mb-0" *ngIf="formMedicamento.get('observacoes')?.errors?.['required']">Campo não pode ser vazio
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Botoes -->
+      <div class="row mt-3">
+        <div class="col-sm-9 col-lg-6 col-md-6 m-auto text-center">
+          <button type="submit" *ngIf="formMedicamento.value.id == null" class="btn btn-success me-3">Cadastrar</button>
+          <button type="submit" *ngIf="formMedicamento.value.id != null" class="btn btn-success me-3">Salvar</button>
+          <button type="button" [disabled]="formMedicamento.value.id == null" (click)="editar()"
+            class="btn btn-warning me-3">Editar</button>
+          <button type="button" [disabled]="formMedicamento.value.id == null" (click)="deletar()"
+            class="btn btn-danger">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
