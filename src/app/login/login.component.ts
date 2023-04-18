@@ -33,12 +33,16 @@ export class LoginComponent implements OnInit {
     senha: ''
   }
   ngOnInit() {
-
-    if(this.usuarioLogado.length>0){
-      this.rotas.navigate(['']);
-    }
+    this.checarUsuarioLogado()
     this.criarFormLogin();
     this.criarFormCadastro();
+  }
+  checarUsuarioLogado(){
+    if(this.usuarioLogado.email != undefined){
+      console.log(this.usuarioLogado.email);
+      this.rotas.navigate(['/home']);
+    }
+
   }
   criarFormLogin() {
     this.loginFormModel = {
@@ -66,7 +70,7 @@ export class LoginComponent implements OnInit {
       this.mensagem = 'Usuário ou senha inválido'
     } else {
       this.storage.setUsuarioLogado('USUARIO_LOGADO', this.loginFormModel);
-      this.rotas.navigate(['']);
+      this.rotas.navigate(['/home']);
     }
   }
 

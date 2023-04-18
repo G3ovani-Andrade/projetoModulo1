@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { provideEnvironmentNgxMask,NgxMaskDirective } from 'ngx-mask';
 import { PesquisaComponent } from './components/pesquisa/pesquisa.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { MenuLateralComponent } from './menu-lateral/menu-lateral.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     CadastroPacienteComponent,
     PesquisaComponent,
     ToolbarComponent,
+    MenuLateralComponent,
   ],
   imports: [
     BrowserModule,

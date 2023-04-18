@@ -1,0 +1,26 @@
+<div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
+  aria-labelledby="staticBackdropLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="staticBackdropLabel">Med</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="container">
+      <div class="row">
+
+        <div class="list-group">
+          <a [routerLink]="'/home'" type="button" class="list-group-item list-group-item-action">Início</a>
+          <a [routerLink]="'/login'" (click)="deslogar()" type="button" class="list-group-item list-group-item-action">Sair</a>
+        </div>
+      </div>
+      <div class="row mt-5">
+        <h6>Cadastro</h6>
+        <div class="list-group">
+          <a [routerLink]="'/cadastroPaciente'" type="button" class="list-group-item list-group-item-action">Paciente</a>
+          <a [routerLink]="'/cadastroMedicamento'" type="button" class="list-group-item list-group-item-action">Medicamento</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

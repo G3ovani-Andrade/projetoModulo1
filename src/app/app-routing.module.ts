@@ -5,10 +5,13 @@ import { HomeComponent } from './home/home.component';
 import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente.component';
 
 const routes: Routes = [
+  {path: '', component:LoginComponent},
   {path: 'login', component:LoginComponent},
-  {path: '', component:HomeComponent},
+  {path: 'home', component:HomeComponent},
   {path: 'cadastroPaciente', component:CadastroPacienteComponent},
   {path: 'cadastroPaciente/:id', component:CadastroPacienteComponent},
+  {path: 'cadastroMedicamento', component:CadastroPacienteComponent},
+  {path: '**', component:HomeComponent},
 ];
 
 @NgModule({
