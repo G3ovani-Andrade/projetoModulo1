@@ -21,7 +21,6 @@ export class CadastroMedicamentosComponent implements OnInit {
   }
 
   formMedicamento = this.fb.group({
-    id: [null],
     nomeMedicamento: ['', { validators: [Validators.required, Validators.maxLength(80), Validators.minLength(8)] }],
     data: ['', { validators: [Validators.required, Validators.minLength(8)] }],
     hora: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
@@ -30,22 +29,15 @@ export class CadastroMedicamentosComponent implements OnInit {
     unidade: ['', { validators: [Validators.required] }],
     observacoes: ['', { validators: [Validators.required, Validators.maxLength(8000), Validators.minLength(8)] }],
   });
-
   carregarPacientes() {
     this.pacientesLocal = this.storagePacientes.getPacientes('PACIENTES');
     return this.pacientesLocal;
   }
   atualizarData() {
     let dataAtual = new Date().toLocaleDateString();
-    let diaAtual = dataAtual.slice(0, 2);
-    let mesAtual = dataAtual.slice(3, 5);
-    let anoAtual = dataAtual.slice(6, 10);
-    let horaAtual = new Date();
-    let hora = horaAtual.getHours();
-    let minutos = horaAtual.getMinutes();
-    let segundos = horaAtual.getSeconds();
-    this.formMedicamento.patchValue({ data: (`${diaAtual}/${mesAtual}/${anoAtual}`) });
-    this.formMedicamento.get('hora')?.patchValue(`${hora}${minutos}${segundos}`);
+    let horaAtual = new Date().toLocaleTimeString();
+    this.formMedicamento.patchValue({ data: (dataAtual)});
+    this.formMedicamento.get('hora')?.patchValue(horaAtual);
   }
   cadastrar() {
     this.limparMensagem()
@@ -55,12 +47,19 @@ export class CadastroMedicamentosComponent implements OnInit {
       if(this.pacienteSelecionado.medicamentos == undefined){
         this.pacienteSelecionado.medicamentos = [];
       }
-      this.pacienteSelecionado.medicamentos.push(this.formMedicamento.value);
-      console.log(this.pacienteSelecionado.medicamentos);
-      this.storagePacientes.setPacientes('PACIENTES', this.pacienteSelecionado);
-      this.mensagemCadastro = "Cadastrado com sucesso"
-      this.formCadMed.resetForm();
-      this.atualizarData()
+      if(this.formMedicamento.valid){
+        this.pacienteSelecionado.medicamentos.push(this.formMedicamento.value);
+        console.log(this.pacienteSelecionado.medicamentos);
+        this.storagePacientes.setPacientes('PACIENTES', this.pacienteSelecionado);
+        this.mensagemCadastro = "Cadastrado com sucesso"
+        this.formCadMed.resetForm();
+        this.atualizarData()
+      }else{
+        console.log(this.formMedicamento.value);
+
+        this.mensagemCadastro = "Formulario inválido"
+      }
+
     }
   }
   deletar() {
