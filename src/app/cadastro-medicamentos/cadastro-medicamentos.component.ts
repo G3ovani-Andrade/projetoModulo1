@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, NgForm, Validators } from '@angular/forms';
 import { StoragePacienteService } from '../services/paciente/storage-paciente.service';
 
 @Component({
@@ -11,6 +11,10 @@ export class CadastroMedicamentosComponent implements OnInit {
   mensagemBusca: string = ""
   pacientesLocal: any[] = [];
   pacienteSelecionado: any;
+  mensagemCadastro:string="";
+  @ViewChild('formCadMed')
+  formCadMed!: NgForm;
+
   constructor(private fb: FormBuilder, private storagePacientes: StoragePacienteService) { }
   ngOnInit(): void {
     this.atualizarData();
@@ -44,14 +48,20 @@ export class CadastroMedicamentosComponent implements OnInit {
     this.formMedicamento.get('hora')?.patchValue(`${hora}${minutos}${segundos}`);
   }
   cadastrar() {
+    this.limparMensagem()
     if (this.pacienteSelecionado == null) {
       this.mensagemBusca = "Selecione um paciente"
     } else {
-      this.pacienteSelecionado.medicamentos = []
-      this.formMedicamento.patchValue({quantidade: this.pacienteSelecionado.quantidade.toFixed(2)});
+      if(this.pacienteSelecionado.medicamentos == undefined){
+        this.pacienteSelecionado.medicamentos = [];
+      }
       this.pacienteSelecionado.medicamentos.push(this.formMedicamento.value);
+      console.log(this.pacienteSelecionado.medicamentos);
+      this.storagePacientes.setPacientes('PACIENTES', this.pacienteSelecionado);
+      this.mensagemCadastro = "Cadastrado com sucesso"
+      this.formCadMed.resetForm();
+      this.atualizarData()
     }
-    console.log(this.pacienteSelecionado);
   }
   deletar() {
 
@@ -59,13 +69,12 @@ export class CadastroMedicamentosComponent implements OnInit {
   selecionarPaciente(paciente: any) {
     this.pacienteSelecionado = paciente
     console.log(this.pacienteSelecionado);
-
-
   }
   editar() { }
   limparMensagem() {
     setTimeout(() => {
       this.mensagemBusca = '';
+      this.mensagemCadastro = '';
     }, 2000);
   }
   buscaPacientes(valorBuscar: string) {
@@ -86,6 +95,7 @@ export class CadastroMedicamentosComponent implements OnInit {
     this.limparMensagem()
     if (valorBuscar == "") {
       this.mensagemBusca = "Valor inválido"
+      this.pacientesLocal = [];
       return;
     }
     this.pacientesLocal = this.buscaPacientes(valorBuscar);
