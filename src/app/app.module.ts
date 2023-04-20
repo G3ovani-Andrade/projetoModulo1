@@ -14,6 +14,7 @@ import { PesquisaComponent } from './components/pesquisa/pesquisa.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MenuLateralComponent } from './menu-lateral/menu-lateral.component';
 import { CadastroMedicamentosComponent } from './cadastro-medicamentos/cadastro-medicamentos.component';
+import { ListagemHistoricoComponent } from './listagem-historico/listagem-historico.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { CadastroMedicamentosComponent } from './cadastro-medicamentos/cadastro-
     ToolbarComponent,
     MenuLateralComponent,
     CadastroMedicamentosComponent,
+    ListagemHistoricoComponent,
   ],
   imports: [
     BrowserModule,
