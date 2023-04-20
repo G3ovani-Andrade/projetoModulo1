@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Usuario } from '../User/User';
-import { StorageService } from '../services/storage.service';
+import { StorageService } from '../services/login/storage.service';
 import { Router } from '@angular/router';
 import { FormGroup,FormControl, NgForm, FormBuilder} from '@angular/forms';
 import { Validators } from '@angular/forms';

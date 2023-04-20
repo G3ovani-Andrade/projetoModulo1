@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { StorageService } from '../services/storage.service';
+import { StorageService } from '../services/login/storage.service';
 
 @Component({
   selector: 'app-menu-lateral',

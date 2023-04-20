@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { StorageService } from '../services/storage.service';
+import { StorageService } from '../services/login/storage.service';
 import { ActivatedRoute,NavigationEnd, Router } from '@angular/router';
 
 @Component({
