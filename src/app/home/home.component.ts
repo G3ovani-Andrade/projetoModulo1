@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { StoragePacienteService } from '../services/paciente/storage-paciente.service';
-import { getLocaleDateFormat } from '@angular/common';
+
 
 @Component({
   selector: 'app-home',
@@ -10,12 +10,18 @@ import { getLocaleDateFormat } from '@angular/common';
 export class HomeComponent {
   pacientesLocal: any[] = [];
   totalPacientes = 0;
+  totalMedicamentos = 0;
   constructor(private storagePacientes: StoragePacienteService) {
     this.carregarPacientes();
   }
   carregarPacientes() {
     this.pacientesLocal = this.storagePacientes.getPacientes('PACIENTES');
-    this.totalPacientes = this.pacientesLocal.length
+    this.totalPacientes = this.pacientesLocal.length;
+    this.pacientesLocal.forEach((paciente: any) =>{
+      if(paciente.medicamentos){
+       this.totalMedicamentos += paciente.medicamentos.length;
+      }
+    })
   }
   buscar(valorBuscar: string) {
     this.carregarPacientes();
