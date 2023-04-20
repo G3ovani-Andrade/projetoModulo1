@@ -1,141 +1,103 @@
 <div class="container w-50 mt-5 m-auto">
-  <form (ngSubmit)="login()" #loginForm="ngForm">
+  <form (ngSubmit)="login()" [formGroup]="formularioLogin" #loginForm="ngForm">
     <div class="form-floating mb-3 ">
       <input type="email" name="email" class="form-control"
-        [ngClass]="{'is-invalid':!loginFormModel.email.length && loginForm.submitted}"
-        [(ngModel)]="loginFormModel.email" id="email" placeholder="Email">
+ id="email" placeholder="Email" formControlName="email">
       <label for="email">Email</label>
       <div *ngIf="loginForm.submitted" class="text-danger">
-        <p class="mb-0" *ngIf="!loginFormModel.email.length">Email não pode ser vazio</p>
-        <p class="mb-0" *ngIf="!verificarEmail(loginFormModel.email)">Email inválido</p>
+        <p *ngIf="formularioLogin.get('email')?.errors?.['required']" class="mb-0">Campo não pode ser vazio</p>
+        <p *ngIf="formularioLogin.get('email')?.errors?.['email']" class="mb-0">Email inválido</p>
       </div>
     </div>
-    <div class="form-floating  mb-3">
-      <input type="password" class="form-control" name="senha"
-        [ngClass]="{'is-invalid':!loginFormModel.senha.length && loginForm.submitted}"
-        [(ngModel)]="loginFormModel.senha" id="senha" placeholder="Senha">
+    <div class="form-floating ">
+      <input type="password" class="form-control" name="senha" id="senha" placeholder="Senha" formControlName="senha">
       <label for="senha">Senha</label>
       <div *ngIf="loginForm.submitted" class="text-danger">
-        <p *ngIf="!loginFormModel.senha.length" class="mb-0">senha não pode ser vazio</p>
-        <p *ngIf="loginFormModel.senha.length<10" class="mb-0">Senha deve conter 10 caracteres</p>
-        <p *ngIf="loginForm.submitted" class="mb-0">{{ mensagem }}</p>
+        <p *ngIf="formularioLogin.get('senha')?.errors?.['required']" class="mb-0">Campo não pode ser vazio</p>
+        <p *ngIf="formularioLogin.get('senha')?.errors?.['minlength']" class="mb-0">Senha deve conter 10 caracteres</p>
       </div>
     </div>
-
-    <div class="form-floating  mb-3 text-center">
+    <div class="row">
+      <div class="col-5 m-auto mt-2 text-center">
+        <p class="badge bg-danger text-wrap mb-0 text-center" *ngIf="true">{{mensagem}}</p>
+      </div>
+    </div>
+    <div class="form-floating mt-3 mb-3 text-center">
       <button type="submit" class="btn btn-success">Entrar</button>
     </div>
-    <div class="form-floating  mb-3 text-center">
-      <a data-bs-toggle="modal" data-bs-target="#modalCadastro"
-        class="link-primary me-4">Cadastrar</a>
+  </form>
+  <div class=" row form-floating m-auto justify-content-center mt-3 text-center">
+    <div class="col-sm-12">
+      <a data-bs-toggle="modal" data-bs-target="#modalCadastro" class="link-primary">Cadastrar</a>
+    </div>
+    <div class="col-sm-12 p-0">
       <a class="link-primary" data-bs-toggle="modal" data-bs-target="#modalSenha">Esqueceu a senha?</a>
     </div>
-    <!--Modal resetar a senha-->
-<div class="modal fade" id="modalSenha" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Erro</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Funcionalidade está em construção
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
+
+  </div>
+
+  <!--Modal resetar a senha-->
+  <div class="modal fade" id="modalSenha" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Erro</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Funcionalidade está em construção
+        </div>
+        <div class="modal-footer">
         </div>
       </div>
     </div>
-     <!-- Modal cadastro usuario  -->
-    <div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastro usuário</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form (ngSubmit)="cadastroUsuario()" #CadastroForm="ngForm">
-              <div class="form-floating mb-3 ">
-                <input type="email" name="emailCadastrar" class="form-control"
-                  [ngClass]="{'is-invalid':!cadastroFormModel.email.length && CadastroForm.submitted}"
-                  [(ngModel)]="cadastroFormModel.email" id="usuarioCadastrar" placeholder="Email">
-                <label for="emailCadastrar">Email</label>
-                <div *ngIf="CadastroForm.submitted" class="text-danger">
-                  <p class="mb-0" *ngIf="!cadastroFormModel.email.length">Email não pode ser vazio</p>
-                  <p class="mb-0" *ngIf="!verificarEmail(cadastroFormModel.email)">Email inválido</p>
-                </div>
-              </div>
-              <div class="form-floating  mb-3">
-                <input type="password" class="form-control" name="confirmarSenha"
-                  [ngClass]="{'is-invalid':!cadastroFormModel.senha.length && CadastroForm.submitted}"
-                  [(ngModel)]="cadastroFormModel.senha" id="confirmarSenha" placeholder="Senha">
-                <label for="confirmarSenha">Senha</label>
-                <div *ngIf="CadastroForm.submitted" class="text-danger">
-                  <p *ngIf="!cadastroFormModel.senha.length" class="mb-0">senha não pode ser vazio</p>
-                  <p *ngIf="cadastroFormModel.senha.length<10" class="mb-0">Senha deve conter 10 caracteres</p>
-                </div>
-              </div>
-              <div class="form-floating  mb-3">
-                <input type="password" class="form-control" name="senhaCadastro"
-                  [ngClass]="{'is-invalid':!confirmarSenha.length && CadastroForm.submitted}"
-                  [(ngModel)]="confirmarSenha" id="senhaCadastro" placeholder="Senha">
-                <label for="senha">Senha</label>
-                <div *ngIf="CadastroForm.submitted" class="text-danger">
-                  <p *ngIf="!confirmarSenha.length && CadastroForm.submitted" class="mb-0">senha não pode ser vazio</p>
-                  <p *ngIf="confirmarSenha.length<10" class="mb-0">Senha deve conter 10 caracteres</p>
-                  <p *ngIf="CadastroForm.submitted" class="mb-0">{{mensagemCadastro}}</p>
-                </div>
-              </div>
+  </div>
 
-              <div class="form-floating  mb-3 text-center">
-                <button type="submit" class="btn btn-success">Cadastrar</button>
+  <!-- Modal cadastro usuario  -->
+  <div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastro usuário</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="CadastroForm.resetForm()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="cadastroUsuario()" [formGroup]="formulariocadastro" #CadastroForm="ngForm">
+            <div class="form-floating mb-3 ">
+              <input type="email" name="emailCadastrar" class="form-control" id="usuarioCadastrar" placeholder="Email" formControlName="email">
+              <label for="emailCadastrar">Email</label>
+              <div *ngIf="CadastroForm.submitted" class="text-danger">
+                <p *ngIf="formulariocadastro.get('email')?.errors?.['required']" class="mb-0">Campo não pode ser vazio</p>
+                <p *ngIf="formulariocadastro.get('email')?.errors?.['email']" class="mb-0">Email inválido</p>
               </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
+            </div>
+            <div class="form-floating  mb-3">
+              <input type="password" class="form-control" name="confirmarSenha" id="confirmarSenha" placeholder="Senha" formControlName="confirmar">
+              <label for="confirmarSenha">Senha</label>
+              <div *ngIf="CadastroForm.submitted" class="text-danger">
+                <p *ngIf="formulariocadastro.get('confirmar')?.errors?.['required']" class="mb-0">Campo não pode ser vazio</p>
+                <p *ngIf="formulariocadastro.get('confirmar')?.errors?.['minlength']" class="mb-0">Senha deve conter 10 caracteres</p>
+              </div>
+            </div>
+            <div class="form-floating">
+              <input type="password" class="form-control" name="senhaCadastro" formControlName="senha"
+                id="senhaCadastro" placeholder="Senha">
+              <label for="senha">Senha</label>
+              <div *ngIf="CadastroForm.submitted" class="text-danger">
+                <p *ngIf="formulariocadastro.get('senha')?.errors?.['required']" class="mb-0">Campo não pode ser vazio</p>
+                <p *ngIf="formulariocadastro.get('senha')?.errors?.['minlength']" class="mb-0">Senha deve conter 10 caracteres</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 m-auto mt-2 text-center">
+                <p class="badge bg-danger text-wrap mb-0 text-center" *ngIf="true">{{mensagemCadastro}}</p>
+              </div>
+            </div>
+            <div class="form-floating mt-3 mb-3 text-center">
+              <button type="submit" class="btn btn-success">Cadastrar</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-  </form>
-</div>
-
-
-
-
-
-
-
-
-<!-- <div class="container w-50 mt-5 m-auto">
-  <form (ngSubmit)="enviar()" [formGroup]="formulario" #formLogin="ngForm">
-    <div class="form-floating mb-3 ">
-      <input type="email" name="email" class="form-control" [ngClass]="{'is-invalid':email.invalid && formLogin.submitted}" formControlName="email"
-        id="email" placeholder="Email">
-      <label for="email">Email</label>
-      <div *ngIf="email.invalid && formLogin.submitted" class="text-danger">
-        <p *ngIf="email.errors?.['required']">Email não pode ser vazio</p>
-        <p *ngIf="email.errors?.['email']">Email nao é valido</p>
-      </div>
-    </div>
-    <div class="form-floating  mb-3">
-      <input type="password" class="form-control" name="senha" formControlName="senha" id="senha" placeholder="Senha">
-      <label for="senha">Senha</label>
-      <div class="text-danger">
-        <p class="mb-0">senha não pode ser vazio</p>
-        <p class="mb-0"></p>
-      </div>
-    </div>
-
-    <div class="form-floating  mb-3 text-center">
-      <button type="submit" class="btn btn-success">Entrar</button>
-    </div>
-    <div class="form-floating  mb-3 text-center">
-      <a data-bs-toggle="modal" data-bs-target="#modalCadastro" class="link-primary me-4">Cadastrar</a>
-      <a class="link-primary" data-bs-toggle="modal" data-bs-target="#modalSenha">Esqueceu a senha?</a>
-    </div>
-  </form>
-</div> -->
+  </div>
