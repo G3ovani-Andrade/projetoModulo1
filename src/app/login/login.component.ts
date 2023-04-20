@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Usuario } from '../User/User';
 import { StorageService } from '../services/storage.service';
 import { Router } from '@angular/router';
-import { FormGroup,FormControl} from '@angular/forms';
+import { FormGroup,FormControl, NgForm, FormBuilder} from '@angular/forms';
 import { Validators } from '@angular/forms';
 
 @Component({
@@ -11,72 +11,59 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  numero: boolean = false;
-  minuscula: boolean = false;
-  maiuscula: boolean = false;
-  especial: boolean = false;
   usuarios: any = [];
-  confirmarSenha:string ="";
   mensagemCadastro:string="";
   usuarioLogado:any={};
-  constructor(private storage: StorageService,private rotas : Router) {
-    this.usuarioLogado = this.storage.getUsuarioLogado('USUARIO_LOGADO');
-  }
+  mensagem: string = '';
+  @ViewChild('loginForm')
+  formLog!: NgForm;
+  @ViewChild('CadastroForm')
+  formCad!: NgForm;
+  formularioLogin:any = FormGroup;
+  formulariocadastro:any = FormGroup;
 
-  mensagem: string = ''
-  loginFormModel: Usuario = {
-    email: '',
-    senha: ''
-  }
-  cadastroFormModel: Usuario = {
-    email: '',
-    senha: ''
+  constructor(private storage: StorageService,private rotas : Router,private fb: FormBuilder) {
+    //this.usuarioLogado = this.storage.getUsuarioLogado('USUARIO_LOGADO');
   }
   ngOnInit() {
-    this.checarUsuarioLogado()
+    //this.checarUsuarioLogado()
     this.criarFormLogin();
     this.criarFormCadastro();
   }
-  checarUsuarioLogado(){
-    if(this.usuarioLogado.email != undefined){
-      console.log(this.usuarioLogado.email);
-      this.rotas.navigate(['/home']);
-    }
+  // checarUsuarioLogado(){
+  //   if(this.usuarioLogado.email != undefined){
+  //     console.log(this.usuarioLogado.email);
+  //     this.rotas.navigate(['/home']);
+  //   }
 
-  }
+  // }
   criarFormLogin() {
-    this.loginFormModel = {
-      email: "",
-      senha: "",
-    }
+    this.formularioLogin = this.fb.group({
+      email: ['', [Validators.required,Validators.email]],
+      senha: ['', [Validators.required, Validators.minLength(10)]]
+    });
   }
   criarFormCadastro() {
-    this.cadastroFormModel = {
-      email: "",
-      senha: "",
-    }
+    this.formulariocadastro = this.fb.group({
+      email: ['', [Validators.required,Validators.email]],
+      senha: ['', [Validators.required, Validators.minLength(10)]],
+      confirmar: ['', [Validators.required, Validators.minLength(10)]],
+    });
   }
   login() {
     this.limparMensagem();
-    if(!this.verificarEmail(this.loginFormModel.email)){
-      return
-    }else if(this.loginFormModel.senha.length<10){
+    if(this.formularioLogin.invalid){
+      console.log('invalid');
       return
     }
-
 
     this.usuarios = this.storage.getLocalStorage('USUARIOS');
-    if (this.checarUsuario(this.usuarios,this.loginFormModel,'login')) {
+    if (this.checarUsuario(this.usuarios,this.formularioLogin.value,'login')) {
       this.mensagem = 'Usuário ou senha inválido'
     } else {
-      this.storage.setUsuarioLogado('USUARIO_LOGADO', this.loginFormModel);
+      this.storage.setUsuarioLogado('USUARIO_LOGADO',this.formularioLogin.value);
       this.rotas.navigate(['/home']);
     }
-  }
-
-  verificarEmail(email: string){
-    let emailRegex = /^([a-z]){1,}([a-z0-9._-]){1,}([@]){1}([a-z]){2,}([.]){1}([a-z]){2,}([.]?){1}([a-z]?){2,}([.]?){1}([a-z]?){2,}$/i;
-    return emailRegex.test(email);
   }
 
   checarUsuario(usuarios: Usuario[],objBusca:Usuario,tipo:string) {
@@ -88,8 +75,11 @@ export class LoginComponent implements OnInit {
     }
 
     if (novoArray) {
+      console.log('false');
+
       return false;
     } else {
+      console.log('treu');
       return true;
     }
   }
@@ -101,44 +91,24 @@ export class LoginComponent implements OnInit {
   }
   cadastroUsuario(){
     this.limparMensagem();
-    if(this.cadastroFormModel.senha == this.confirmarSenha){
-      if(this.cadastroFormModel.senha.length<10){
-        return
-      }else{
+    if(this.formulariocadastro.invalid){
+      console.log('invalid');
+      return
+    }
+    if(this.formulariocadastro.get('senha').value === this.formulariocadastro.get('confirmar').value){
         this.usuarios = this.storage.getLocalStorage('USUARIOS');
-        if(this.checarUsuario(this.usuarios,this.cadastroFormModel,'')){
-          this.usuarios.push(this.cadastroFormModel);
+        if(this.checarUsuario(this.usuarios,this.formulariocadastro.value,'')){
+          this.usuarios.push({email:this.formulariocadastro.get('email').value,senha:this.formulariocadastro.get('senha').value});
           this.storage.setLocalStorage('USUARIOS',this.usuarios);
           this.criarFormCadastro();
-          this.confirmarSenha='';
-          this.mensagemCadastro = "cadastro realizado com sucesso"
+          this.mensagemCadastro = "Cadastro realizado com sucesso"
+          this.formCad.resetForm();
         }else{
           this.mensagemCadastro = "Email já Cadastrado"
         }
-      }
     }else{
       this.mensagemCadastro = "As senhas devem ser iguais"
     }
-
-
-
   }
-
-//   formulario!: FormGroup;
-//   ngOnInit(): void {
-//     this.formulario = new FormGroup({
-//       email: new FormControl('',[Validators.required, Validators.email]),
-//       senha: new FormControl('',[Validators.required, Validators.minLength(10)]),
-//       confirmarSenha: new FormControl ('',[Validators.required, Validators.minLength(10)])
-//     });
-//   }
-
-//  get email(){
-//   return this.formulario.get('email')!;
-//  }
-//  enviar(){
-//   console.log(this.formulario.value.email);
-
-//  }
 
 }
