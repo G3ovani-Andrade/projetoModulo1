@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { StorageService } from '../services/storage.service';
+import { StorageService } from '../services/login/storage.service';
 
 @Component({
   selector: 'app-menu-lateral',
@@ -9,7 +9,6 @@ import { StorageService } from '../services/storage.service';
 export class MenuLateralComponent {
   constructor(private storageService: StorageService){};
   deslogar(){
-    this.storageService.setUsuarioLogado("USUARIO_LOGADO",{});
-
+    this.storageService.sair()
   }
 }
