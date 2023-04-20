@@ -15,6 +15,7 @@ export class HomeComponent {
     this.carregarPacientes();
   }
   carregarPacientes() {
+    this.totalMedicamentos =0
     this.pacientesLocal = this.storagePacientes.getPacientes('PACIENTES');
     this.totalPacientes = this.pacientesLocal.length;
     this.pacientesLocal.forEach((paciente: any) =>{
