@@ -9,7 +9,6 @@ import { StorageService } from '../services/storage.service';
 export class MenuLateralComponent {
   constructor(private storageService: StorageService){};
   deslogar(){
-    this.storageService.setUsuarioLogado("USUARIO_LOGADO",{});
-
+    this.storageService.sair()
   }
 }

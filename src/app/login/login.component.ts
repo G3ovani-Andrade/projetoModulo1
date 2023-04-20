@@ -23,20 +23,18 @@ export class LoginComponent implements OnInit {
   formulariocadastro:any = FormGroup;
 
   constructor(private storage: StorageService,private rotas : Router,private fb: FormBuilder) {
-    //this.usuarioLogado = this.storage.getUsuarioLogado('USUARIO_LOGADO');
+
   }
   ngOnInit() {
-    //this.checarUsuarioLogado()
+    this.checarUsuarioLogado()
     this.criarFormLogin();
     this.criarFormCadastro();
   }
-  // checarUsuarioLogado(){
-  //   if(this.usuarioLogado.email != undefined){
-  //     console.log(this.usuarioLogado.email);
-  //     this.rotas.navigate(['/home']);
-  //   }
-
-  // }
+  checarUsuarioLogado(){
+    if(this.storage.retornarUsuarioLogado()){
+      this.rotas.navigate(['/home']);
+    }
+  }
   criarFormLogin() {
     this.formularioLogin = this.fb.group({
       email: ['', [Validators.required,Validators.email]],
@@ -53,7 +51,6 @@ export class LoginComponent implements OnInit {
   login() {
     this.limparMensagem();
     if(this.formularioLogin.invalid){
-      console.log('invalid');
       return
     }
 
