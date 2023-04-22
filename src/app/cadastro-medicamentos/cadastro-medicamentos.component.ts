@@ -69,7 +69,6 @@ export class CadastroMedicamentosComponent implements OnInit {
         validarMedicamento = paciente.medicamentos.find((medicamento: any, index: number) => {
           if (JSON.stringify(medicamento.nomeMedicamento) === JSON.stringify(this.formMedicamento.get('nomeMedicamento')?.value)) {
             paciente.medicamentos[index] = this.formMedicamento.value;
-            console.log(paciente.medicamentos[index]);
           }
         })
         this.mensagemCadastro = "Salvo com sucesso"
@@ -92,7 +91,6 @@ export class CadastroMedicamentosComponent implements OnInit {
         this.formCadMed.resetForm();
         this.atualizarData()
       } else {
-        console.log(this.formMedicamento.value);
         this.mensagemCadastro = "Formulario inválido"
       }
 
@@ -111,7 +109,6 @@ export class CadastroMedicamentosComponent implements OnInit {
   }
   selecionarPaciente(paciente: any) {
     this.pacienteSelecionado = paciente
-    console.log(this.pacienteSelecionado);
   }
   editar() {
     this.formMedicamento.enable();
@@ -125,8 +122,6 @@ export class CadastroMedicamentosComponent implements OnInit {
   buscaPacientes(valorBuscar: string) {
     let pacientesBusca = this.carregarPacientes();
     this.pacienteSelecionado = {}
-    console.log(pacientesBusca);
-
     pacientesBusca = this.pacientesLocal.filter((paciente: any) => {
       if (paciente.nome.toLowerCase().includes(valorBuscar.toLowerCase())) {
         return true;
