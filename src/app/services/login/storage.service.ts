@@ -32,7 +32,6 @@ export class StorageService {
   }
   retornarUsuarioLogado() {
     let usuarioLogado = localStorage.getItem('USUARIO_LOGADO');
-    console.log(usuarioLogado);
     if (usuarioLogado == null) {
       return false;
     } else {

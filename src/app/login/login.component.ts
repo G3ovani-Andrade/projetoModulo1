@@ -72,11 +72,8 @@ export class LoginComponent implements OnInit {
     }
 
     if (novoArray) {
-      console.log('false');
-
       return false;
     } else {
-      console.log('treu');
       return true;
     }
   }
@@ -89,7 +86,6 @@ export class LoginComponent implements OnInit {
   cadastroUsuario(){
     this.limparMensagem();
     if(this.formulariocadastro.invalid){
-      console.log('invalid');
       return
     }
     if(this.formulariocadastro.get('senha').value === this.formulariocadastro.get('confirmar').value){

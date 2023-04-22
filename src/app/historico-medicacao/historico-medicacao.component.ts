@@ -24,19 +24,16 @@ export class HistoricoMedicacaoComponent implements OnInit{
     this.rotaAtiva.params.subscribe(params => {
       this.id = params['id'];
       this.nomeMedicamento = params['nomeMedicamento'];
-      console.log(this.id);
     })
   }
   carregasPacientes(){
     let pacientes= this.storagePacientes.getPacientes('PACIENTES');
     this.pacienteCarregado = pacientes.find((paciente: any) =>{
       if(paciente.id == this.id){
-        console.log(paciente.id);
         return true;
       }
       return false
     })
-    console.log(this.pacienteCarregado);
   }
 
 
