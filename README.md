@@ -2,7 +2,7 @@
 
 O projeto foi desenvolvido inicialmente para atender locais com demanda de pacientes que necessitam de administração de medicamentos, manipulação de pacientes cadastrados e gerenciamento de medicamentos receitados, atendendo uma gama variada de clientes, desde clínicas odontológicas até unidades emergenciais. Como upas e hospitais de médio porte.
 
-<h1 align="center">Técnicas e tecnologias</h1>
+<h2 align="center">Técnicas e tecnologias</h2>
 
 O projeto foi criado sobre a plataforma angular, distribuída em componentes e serviços, na parte lógica utilizamos o Typescript para gerenciar os componentes. Na parte de estilização usamos a plataforma do Bootstrap que conta com uma infinidade de estilizações já pré formatadas, auxiliando na criação do projeto e na agilidade da entrega, sem contar a facilidade de desenvolver projetos responsivos com capacidade de ser executado em ampla gama de dispositivos.
 As técnicas usadas foram diversas, os campos usam ngx-mask, para salvar os dados localStorage, html 5 para construção das páginas, ngIf para campos onde precisamos de validações pra serem expostos, ngFor onde necessitamos listar as propriedades e uma serie de outras técnicas foram abordadas.
@@ -11,7 +11,7 @@ As técnicas usadas foram diversas, os campos usam ngx-mask, para salvar os dado
   <img src="https://user-images.githubusercontent.com/124536228/233807870-75c107d3-0da7-4379-a3b5-ebfe85230ca0.png" />
 </div>
 
-<h1 align="center">Melhorias Futuras</h1>
+<h2 align="center">Melhorias Futuras</h2>
 
     1. Melhora na estilização: de acordo com cada cliente, inclusão de logomarcas e imagens temáticas
     2. Responsividade: Melhoras a gama de dispositivos aceitos
@@ -25,7 +25,7 @@ As técnicas usadas foram diversas, os campos usam ngx-mask, para salvar os dado
     10. Implementar trava para o sistema não aceitar medicações onde o paciente tenha alergia
     11. Ajustar o campo alergias e cuidados específicos para que não aceitem campos vazios
 
-<h1 align="center">Como executar</h1>
+<h2 align="center">Como executar</h2>
 
     1. Acesse o link https://github.com/G3ovani-Andrade/projetoModulo1
     2. Clique em code
@@ -75,3 +75,12 @@ As técnicas usadas foram diversas, os campos usam ngx-mask, para salvar os dado
     <img src="https://user-images.githubusercontent.com/124536228/233808374-c587e944-b151-4ec2-bb44-1f4c557dc190.png" />
   </div>
 
+<h2 align="center">Outra Forma de executar</h2>
+
+    1. Copie o link do link https://github.com/G3ovani-Andrade/projetoModulo1
+
+    2. Abra uma nova janela do “cmd”
+
+    3. Digite o código git clone e adicione o link
+    
+    4. Repita os passos 7,8,9 e 10 .
