@@ -1,26 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StoragePacienteService {
+export class StoragePacienteService{
   id: number = 0;
   constructor() {
     this.atualizarId();
   }
 
+
   setPacientes(chave: string, paciente: any) {
     let pacientes = this.getPacientes(chave);
-    if (paciente.id == null) {
-      paciente.id = this.id;
+    if (paciente.id == null || paciente.id== undefined) {
       this.atualizarId();
+      paciente.id = this.id;
     }else{
       pacientes.forEach((element: any, index: number) => {
         if (element.id == paciente.id) {
           pacientes[index] = paciente;
         }
       });
-      console.log(pacientes);
       localStorage.setItem(chave, JSON.stringify(pacientes));
       return;
     }
@@ -37,7 +37,6 @@ export class StoragePacienteService {
     var pacientes = this.getPacientes('PACIENTES');
     if(pacientes.length != 0){
       this.id = pacientes[pacientes.length - 1].id + 1
-      console.log(this.id);
     }
   }
 
@@ -51,17 +50,5 @@ export class StoragePacienteService {
     localStorage.setItem(chave, JSON.stringify(pacientes));
     this.atualizarId();
   }
-
-  // editarPaciente(chave: string, paciente: any) {
-  //   console.log(paciente.id);
-  //   let pacientes = this.getPacientes(chave);
-  //   pacientes.forEach((element: any, index: number) => {
-  //     if (element.id == paciente.id) {
-  //       pacientes[index] = paciente;
-  //     }
-  //   });
-  //   console.log(pacientes);
-  //   localStorage.setItem(chave, JSON.stringify(pacientes));
-  // }
 
 }
