@@ -9,7 +9,9 @@ import { StoragePacienteService } from '../services/paciente/storage-paciente.se
 export class ListagemHistoricoComponent {
   mensagemBusca:string='';
   pacientesLocal: any[] = [];
-  constructor(private storagePacientes:StoragePacienteService){}
+  constructor(private storagePacientes:StoragePacienteService){
+    this.carregarPacientes();
+  }
   carregarPacientes() {
     this.pacientesLocal = this.storagePacientes.getPacientes('PACIENTES');
     return this.pacientesLocal
@@ -18,7 +20,7 @@ export class ListagemHistoricoComponent {
     this.limparMensagem()
     if (nome == "") {
       this.mensagemBusca = "Valor inválido"
-      this.pacientesLocal = [];
+      this.pacientesLocal = this.carregarPacientes();
       return;
     }
     this.pacientesLocal = this.buscaPacientes(nome);

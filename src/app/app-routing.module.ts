@@ -6,6 +6,7 @@ import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente
 import { CadastroMedicamentosComponent } from './cadastro-medicamentos/cadastro-medicamentos.component';
 import { GuardaLoginGuard } from './guards/guardaLogin/guarda-login.guard';
 import { ListagemHistoricoComponent } from './listagem-historico/listagem-historico.component';
+import { HistoricoMedicacaoComponent } from './historico-medicacao/historico-medicacao.component';
 
 const routes: Routes = [
   {path: '', component:LoginComponent},
@@ -14,8 +15,9 @@ const routes: Routes = [
   {path: 'cadastroPaciente', component:CadastroPacienteComponent,canActivate:[GuardaLoginGuard]},
   {path: 'cadastroPaciente/:id', component:CadastroPacienteComponent,canActivate:[GuardaLoginGuard]},
   {path: 'cadastroMedicamento', component:CadastroMedicamentosComponent,canActivate:[GuardaLoginGuard]},
+  {path: 'cadastroMedicamento/:id/:medicamento', component:CadastroMedicamentosComponent,canActivate:[GuardaLoginGuard]},
   {path: 'listagemMedicamento', component:ListagemHistoricoComponent,canActivate:[GuardaLoginGuard]},
-  {path: 'historicoMedicacao/:id:nomeMedicamento', component:ListagemHistoricoComponent,canActivate:[GuardaLoginGuard]},
+  {path: 'historicoMedicacao/:id', component:HistoricoMedicacaoComponent,canActivate:[GuardaLoginGuard]},
   {path: '**', component:HomeComponent,canActivate:[GuardaLoginGuard]},
 ];
 

@@ -46,7 +46,7 @@ export class HomeComponent {
 
     idade = (parseInt(anoAtual) - parseInt(ano));
 
-    if(mesAtual<mes && diaAtual<dia){
+    if(mesAtual<mes && diaAtual>dia){
       idade--;
     }
     return idade

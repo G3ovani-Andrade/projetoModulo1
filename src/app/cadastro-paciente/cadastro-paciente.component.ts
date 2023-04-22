@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, AbstractControl, NgForm, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, AbstractControl, NgForm, Validators, FormArray, FormGroup } from '@angular/forms';
 import { StoragePacienteService } from '../services/paciente/storage-paciente.service';
 import { ActivatedRoute } from '@angular/router';
 import { ServiceCepService } from '../services/cep/service-cep.service';
@@ -9,7 +9,7 @@ import { ServiceCepService } from '../services/cep/service-cep.service';
   templateUrl: './cadastro-paciente.component.html',
   styleUrls: ['./cadastro-paciente.component.css']
 })
-export class CadastroPacienteComponent implements OnInit {
+export class CadastroPacienteComponent {
   id: string = ''
   pacienteUrl: any = {};
   erroCep = false;
@@ -17,62 +17,63 @@ export class CadastroPacienteComponent implements OnInit {
   botao: string = 'Cadastrar'
   @ViewChild('formPaciente')
   formPaciente!: NgForm;
+  form: any = FormGroup
 
+  criarForm() {
+    return this.form = this.fb.group({
+      id: [null],
+      nome: ['', { validators: [Validators.required, Validators.maxLength(80), Validators.minLength(4)] }],
+      genero: ['', { validators: [Validators.required] }],
+      data: ['', Validators.compose([Validators.required, this.validarData])],
+      cpf: ['', { validators: [Validators.required, Validators.minLength(11)] }],
+      rg: ['', { validators: [Validators.required, Validators.maxLength(20)] }],
+      estadoCivil: ['', { validators: [Validators.required] }],
+      telefone: ['', { validators: [Validators.required, Validators.minLength(11)] }],
+      email: ['', { validators: [Validators.email] }],
+      naturalidade: ['', { validators: [Validators.required, Validators.maxLength(100), Validators.minLength(5)] }],
+      emergencia: ['', { validators: [Validators.required, Validators.minLength(11)] }],
+      convenio: ['Sem convênio'],
+      carteira: [''],
+      validade: [''],
+      cep: ['', { validators: [Validators.required, Validators.minLength(8)] }],
+      localidade: ['', { validators: [Validators.required] }],
+      uf: ['', { validators: [Validators.required] }],
+      logradouro: ['', { validators: [Validators.required] }],
+      numero: ['', { validators: [Validators.required] }],
+      complemento: ['',],
+      bairro: ['', { validators: [Validators.required] }],
+      referencia: ['',],
+      alergias: this.fb.array([]),
+      cuidados: this.fb.array([])
+    });
+  }
 
-  form = this.fb.group({
-    id: [null],
-    nome: ['', { validators: [Validators.required, Validators.maxLength(80), Validators.minLength(4)] }],
-    genero: ['', { validators: [Validators.required] }],
-    data: ['', Validators.compose([Validators.required, this.validarData])],
-    cpf: ['', { validators: [Validators.required,Validators.minLength(11)] }],
-    rg: ['', { validators: [Validators.required, Validators.maxLength(20)] }],
-    estadoCivil: ['', { validators: [Validators.required] }],
-    telefone: ['', { validators: [Validators.required,Validators.minLength(11)] }],
-    email: ['', { validators: [Validators.email] }],
-    naturalidade: ['', { validators: [Validators.required, Validators.maxLength(100), Validators.minLength(5)] }],
-    emergencia: ['', { validators: [Validators.required,Validators.minLength(11)] }],
-    convenio: ['Sem convênio'],
-    carteira: [''],
-    validade: [''],
-    cep: ['', { validators: [Validators.required,Validators.minLength(8)] }],
-    localidade: ['', { validators: [Validators.required] }],
-    uf: ['', { validators: [Validators.required] }],
-    logradouro: ['', { validators: [Validators.required] }],
-    numero: ['', { validators: [Validators.required] }],
-    complemento: ['',],
-    bairro: ['', { validators: [Validators.required] }],
-    referencia: ['',],
-    alergias: this.fb.array([]),
-    cuidados: this.fb.array([])
-  });
   // Alergias
-  get alergias(){
+  get alergias() {
     return this.form.controls["alergias"] as FormArray;
   }
-  adicionarAlergias(){
+  adicionarAlergias() {
     let alergiaForm = this.fb.group({
       tipo: [''],
     });
     this.alergias.push(alergiaForm);
   }
-  excluirAlergia(index:number){
+  excluirAlergia(index: number) {
     this.alergias.removeAt(index);
   }
-// Cudidados
-  get cuidados(){
+  // Cudidados
+  get cuidados() {
     return this.form.controls["cuidados"] as FormArray;
   }
-  adicionarCuidado(){
+  adicionarCuidado() {
     let cuidadoForm = this.fb.group({
       tipo: [''],
     });
     this.cuidados.push(cuidadoForm);
   }
-  excluirCuidado(index:number){
+  excluirCuidado(index: number) {
     this.cuidados.removeAt(index);
   }
-
-
   validarData(controle: AbstractControl) {
     let data = controle.value;
     if (data) {
@@ -87,29 +88,20 @@ export class CadastroPacienteComponent implements OnInit {
         } else if (ano == 0 || ano > 2023 || ano.length < 4) {
           return { invalido: true }
         }
-        if((mes == 4 || mes ==6 || mes == 9 || mes == 11) && dia>30){
+        if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
           return { invalido: true }
-        }else if(mes==2 && dia>28){
+        } else if (mes == 2 && dia > 28) {
           return { invalido: true }
         }
       }
     }
-
-
     return null;
-
   }
-
-
-
   constructor(private fb: FormBuilder, private storagePacientes: StoragePacienteService, private rota: ActivatedRoute, private api: ServiceCepService) {
+    this.criarForm();
     this.atualizaIdUrl();
-  }
-
-  ngOnInit(): void {
 
   }
-
   atualizaIdUrl() {
     this.rota.params.subscribe(params => {
       this.id = params['id'];
@@ -119,13 +111,13 @@ export class CadastroPacienteComponent implements OnInit {
     pacientes.find((paciente: any) => {
       if (paciente.id == this.id) {
         this.form.patchValue(paciente);
-        paciente.alergias.forEach((alergia:any) => {
+        paciente.alergias.forEach((alergia: any) => {
           let alergiaForm = this.fb.group({
             tipo: [alergia.tipo],
           });
           this.alergias.push(alergiaForm);
         });
-        paciente.cuidados.forEach((cuidado:any) => {
+        paciente.cuidados.forEach((cuidado: any) => {
           let cuidadosForm = this.fb.group({
             tipo: [cuidado.tipo],
           });
@@ -133,42 +125,14 @@ export class CadastroPacienteComponent implements OnInit {
         });
       }
     })
-    if(this.id) {
+    if (this.id) {
       this.form.disable();
     }
 
   }
-
-  // paciente2: any = {
-  //   id: 10,
-  //   nome: 'geovani',
-  //   genero: 'masculino',
-  //   data: '1010',
-  //   cpf: '555555',
-  //   rg: '101015',
-  //   estadoCivil: 'solteiro',
-  //   telefone: '1616549646',
-  //   email: 'geovane@gmail.com',
-  //   naturalidade: 'florida',
-  //   emergencia: '4165654654',
-  //   convenio: "sus",
-  //   carteira: 101525,
-  //   validade: 'asasas',
-  //   cep: '88045397',
-  //   cidade: 'florida',
-  //   estado: 'sc',
-  //   logradouro: 'servidao andrade',
-  //   numero: '27',
-  //   complemento: 'casa',
-  //   bairro: 'saco dos limoes',
-  //   referencia: 'ponto final',
-  // }
-
-
   pegarCep() {
     if (this.form.value.cep!.length >= 8) {
       this.api.getEndereco(this.form.value.cep!).subscribe((e) => {
-        console.log(e);
         if (!e.erro) {
           this.form.patchValue(e)
         } else {
@@ -185,15 +149,12 @@ export class CadastroPacienteComponent implements OnInit {
     }, 2000);
   }
   cadastrar() {
-    console.log(this.form.value);
     this.limparMensagens()
     if (this.formPaciente.invalid) {
-      console.log('invalid');
       return;
     }
     let pacientes = this.storagePacientes.getPacientes('PACIENTES');
     let checarPaciente = pacientes.find((pac: any) => pac.cpf === this.form.value.cpf);
-    console.log(this.form.value.id);
     if (this.form.value.id != null && this.formPaciente.disabled == false) {
       let checarIgualdade = pacientes.find((pac: any) => JSON.stringify(pac) === JSON.stringify(this.form.value));
       if (checarIgualdade) {
@@ -210,6 +171,7 @@ export class CadastroPacienteComponent implements OnInit {
       this.mensagem = 'Cadastrado com sucesso';
       this.storagePacientes.setPacientes('PACIENTES', this.form.value);
       this.formPaciente.resetForm();
+      this.criarForm();
     }
   }
 
@@ -221,15 +183,6 @@ export class CadastroPacienteComponent implements OnInit {
     this.limparMensagens();
   }
   editar() {
-    // this.limparMensagens();
-    // let pacientes = this.storagePacientes.getPacientes('PACIENTES');
-    // let checarIgualdade = pacientes.find((pac: any) => JSON.stringify(pac) === JSON.stringify(this.form.value));
-    // if (checarIgualdade) {
-    //   this.mensagem = 'Nenhum campo alterado';
-    //   this.storagePacientes.editarPaciente('PACIENTES', this.form.value);
-    //   return;
-    // }
-    //this.formLogin.resetForm();
     this.form.enable();
   }
 }

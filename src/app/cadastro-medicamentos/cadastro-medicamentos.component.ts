@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, NgForm, Validators } from '@angular/forms';
 import { StoragePacienteService } from '../services/paciente/storage-paciente.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro-medicamentos',
@@ -11,13 +12,29 @@ export class CadastroMedicamentosComponent implements OnInit {
   mensagemBusca: string = ""
   pacientesLocal: any[] = [];
   pacienteSelecionado: any;
-  mensagemCadastro:string="";
+  mensagemCadastro: string = "";
+  idPaciente: string = "";
+  nomeMedicamento: string = "";
   @ViewChild('formCadMed')
   formCadMed!: NgForm;
 
-  constructor(private fb: FormBuilder, private storagePacientes: StoragePacienteService) { }
+  constructor(private fb: FormBuilder, private rotaAtiva: ActivatedRoute, private storagePacientes: StoragePacienteService) { }
   ngOnInit(): void {
     this.atualizarData();
+    this.rotaAtiva.params.subscribe(params => {
+      this.idPaciente = params['id'];
+      this.nomeMedicamento = params['medicamento'];
+    })
+    this.checarId();
+  }
+
+  checarId() {
+    if (this.idPaciente) {
+      let paciente = this.storagePacientes.getPacientes('PACIENTES').find((paciente: any) => paciente.id == this.idPaciente);
+      this.pacienteSelecionado = paciente;
+      this.formMedicamento.patchValue(paciente.medicamentos.find((medicamento: any) => medicamento.nomeMedicamento == this.nomeMedicamento));
+      this.formMedicamento.disable();
+    }
   }
 
   formMedicamento = this.fb.group({
@@ -25,7 +42,7 @@ export class CadastroMedicamentosComponent implements OnInit {
     data: ['', { validators: [Validators.required, Validators.minLength(8)] }],
     hora: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
     tipo: ['', { validators: [Validators.required,] }],
-    quantidade: ['', { validators: [Validators.required,Validators.minLength(1)] }],
+    quantidade: ['', { validators: [Validators.required, Validators.minLength(1)] }],
     unidade: ['', { validators: [Validators.required] }],
     observacoes: ['', { validators: [Validators.required, Validators.maxLength(8000), Validators.minLength(8)] }],
   });
@@ -36,40 +53,69 @@ export class CadastroMedicamentosComponent implements OnInit {
   atualizarData() {
     let dataAtual = new Date().toLocaleDateString();
     let horaAtual = new Date().toLocaleTimeString();
-    this.formMedicamento.patchValue({ data: (dataAtual)});
+    this.formMedicamento.patchValue({ data: (dataAtual) });
     this.formMedicamento.get('hora')?.patchValue(horaAtual);
   }
   cadastrar() {
     this.limparMensagem()
+    if (this.idPaciente) {
+      let paciente = this.storagePacientes.getPacientes('PACIENTES').find((paciente: any) => paciente.id == this.idPaciente);
+      let validarMedicamento = paciente.medicamentos.find((medicamento: any) => JSON.stringify(medicamento) === JSON.stringify(this.formMedicamento.value))
+      if (validarMedicamento) {
+        this.mensagemCadastro = "Nenhum campo alterado"
+        return
+      }
+        paciente = this.storagePacientes.getPacientes('PACIENTES').find((paciente: any) => paciente.id == this.idPaciente);
+        validarMedicamento = paciente.medicamentos.find((medicamento: any, index: number) => {
+          if (JSON.stringify(medicamento.nomeMedicamento) === JSON.stringify(this.formMedicamento.get('nomeMedicamento')?.value)) {
+            paciente.medicamentos[index] = this.formMedicamento.value;
+            console.log(paciente.medicamentos[index]);
+          }
+        })
+        this.mensagemCadastro = "Salvo com sucesso"
+        this.storagePacientes.setPacientes('PACIENTES', paciente);
+        this.formCadMed.resetForm();
+        return
+
+    }
+
     if (this.pacienteSelecionado == null) {
       this.mensagemBusca = "Selecione um paciente"
     } else {
-      if(this.pacienteSelecionado.medicamentos == undefined){
+      if (this.pacienteSelecionado.medicamentos == undefined) {
         this.pacienteSelecionado.medicamentos = [];
       }
-      if(this.formMedicamento.valid){
+      if (this.formMedicamento.valid) {
         this.pacienteSelecionado.medicamentos.push(this.formMedicamento.value);
-        console.log(this.pacienteSelecionado.medicamentos);
         this.storagePacientes.setPacientes('PACIENTES', this.pacienteSelecionado);
         this.mensagemCadastro = "Cadastrado com sucesso"
         this.formCadMed.resetForm();
         this.atualizarData()
-      }else{
+      } else {
         console.log(this.formMedicamento.value);
-
         this.mensagemCadastro = "Formulario inválido"
       }
 
     }
   }
   deletar() {
-
+    let paciente = this.storagePacientes.getPacientes('PACIENTES').find((paciente: any) => paciente.id == this.idPaciente);
+    let validarMedicamento = paciente.medicamentos.find((medicamento: any, index: number) => {
+      if (JSON.stringify(medicamento) === JSON.stringify(this.formMedicamento.value)) {
+        paciente.medicamentos.splice(index, 1);
+      }
+    })
+    this.storagePacientes.setPacientes('PACIENTES', paciente);
+    this.mensagemCadastro = "Excluido com sucesso"
+    this.formCadMed.resetForm();
   }
   selecionarPaciente(paciente: any) {
     this.pacienteSelecionado = paciente
     console.log(this.pacienteSelecionado);
   }
-  editar() { }
+  editar() {
+    this.formMedicamento.enable();
+  }
   limparMensagem() {
     setTimeout(() => {
       this.mensagemBusca = '';

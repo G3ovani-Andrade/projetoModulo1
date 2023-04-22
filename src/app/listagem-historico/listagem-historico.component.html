@@ -15,7 +15,7 @@
           <span class="rounded-pill">Convênio</span>
         </li>
         <div *ngFor="let paciente of pacientesLocal" class="mt-2">
-          <li class="list-group-item d-flex justify-content-between align-items-center" [routerLink]="['/listagemMedicamento',paciente.id]">
+          <li class="list-group-item d-flex justify-content-between align-items-center" [routerLink]="['/historicoMedicacao',paciente.id]">
             <span class="badge bg-primary rounded-pill" >{{paciente.id }}</span>
             <span class="rounded-pill">{{paciente.nome}}</span>
             <span class="rounded-pill">{{paciente.convenio}}</span>

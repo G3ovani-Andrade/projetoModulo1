@@ -1,0 +1,38 @@
+<div class="container w-75 mt-3 mb-5">
+  <h4>Paciente {{pacienteCarregado?.nome}}</h4>
+  <div class="row">
+    <h5>Cuidados específicos</h5>
+    <div class="col-lg-12" *ngFor="let cuidados of pacienteCarregado?.cuidados">
+      <ul class="list-group">
+        <li class="list-group-item disabled">{{cuidados.tipo}}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <h5>Alergias</h5>
+    <div class="col-lg-12" *ngFor="let alergia of pacienteCarregado?.alergias">
+      <ul class="list-group">
+        <li class="list-group-item disabled">{{alergia.tipo}}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <h4>Remédios</h4>
+    <div class="col-lg-12">
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
+          <span class="rounded-pill">Nome</span>
+          <span class="rounded-pill">Tipo</span>
+          <span class="rounded-pill">Quantidade</span>
+        </li>
+        <div *ngFor="let medicamento of pacienteCarregado?.medicamentos" class="mt-2">
+          <li class="list-group-item d-flex justify-content-between align-items-center" [routerLink]="['/cadastroMedicamento',pacienteCarregado.id,medicamento.nomeMedicamento]">
+            <span class="badge bg-primary rounded-pill" >{{medicamento.nomeMedicamento}}</span>
+            <span class="rounded-pill">{{medicamento.tipo}}</span>
+            <span class="rounded-pill">{{medicamento.quantidade}}</span>
+          </li>
+        </div>
+      </ul>
+    </div>
+  </div>
+</div>
