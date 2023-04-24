@@ -1,10 +1,12 @@
 <h1 align="center">Medication and Life</h1>
 
 <div align="center">
-  <a target="_blank" rel="noopener noreferrer" href="https://drive.google.com/file/d/1jkgq1Ojs-fMGvrUG0YBtdrlxChPWVO1K/view?usp=sharing">
+  <a href="https://drive.google.com/file/d/1jkgq1Ojs-fMGvrUG0YBtdrlxChPWVO1K/view?usp=sharing">
   <img src="https://user-images.githubusercontent.com/124536228/234126538-975e3117-1219-49a8-a98b-bbf2d782c878.png" />
   </a>
 </div>
+
+
 
 O projeto foi desenvolvido inicialmente para atender locais com demanda de pacientes que necessitam de administração de medicamentos, manipulação de pacientes cadastrados e gerenciamento de medicamentos receitados, atendendo uma gama variada de clientes, desde clínicas odontológicas até unidades emergenciais. Como upas e hospitais de médio porte.
 
