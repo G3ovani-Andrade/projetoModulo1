@@ -26,6 +26,7 @@ export class CadastroMedicamentosComponent implements OnInit {
       this.nomeMedicamento = params['medicamento'];
     })
     this.checarId();
+    this.formMedicamento.disable()
   }
 
   checarId() {
@@ -65,82 +66,82 @@ export class CadastroMedicamentosComponent implements OnInit {
         this.mensagemCadastro = "Nenhum campo alterado"
         return
       }
-        paciente = this.storagePacientes.getPacientes('PACIENTES').find((paciente: any) => paciente.id == this.idPaciente);
-        validarMedicamento = paciente.medicamentos.find((medicamento: any, index: number) => {
-          if (JSON.stringify(medicamento.nomeMedicamento) === JSON.stringify(this.formMedicamento.get('nomeMedicamento')?.value)) {
-            paciente.medicamentos[index] = this.formMedicamento.value;
-          }
-        })
-        this.mensagemCadastro = "Salvo com sucesso"
-        this.storagePacientes.setPacientes('PACIENTES', paciente);
-        this.formCadMed.resetForm();
-        return
-
+      paciente = this.storagePacientes.getPacientes('PACIENTES').find((paciente: any) => paciente.id == this.idPaciente);
+      validarMedicamento = paciente.medicamentos.find((medicamento: any, index: number) => {
+        if (JSON.stringify(medicamento.nomeMedicamento) === JSON.stringify(this.formMedicamento.get('nomeMedicamento')?.value)) {
+          paciente.medicamentos[index] = this.formMedicamento.value;
+        }
+      })
+      this.mensagemCadastro = "Salvo com sucesso"
+      this.storagePacientes.setPacientes('PACIENTES', paciente);
+      this.formCadMed.resetForm();
+      return
     }
 
-    if (this.pacienteSelecionado == null) {
-      this.mensagemBusca = "Selecione um paciente"
+
+    if (this.formMedicamento.valid) {
+    if (this.pacienteSelecionado.medicamentos == undefined) {
+      this.pacienteSelecionado.medicamentos = [];
+    }
+      this.pacienteSelecionado.medicamentos.push(this.formMedicamento.value);
+      this.storagePacientes.setPacientes('PACIENTES', this.pacienteSelecionado);
+      this.mensagemCadastro = "Cadastrado com sucesso"
+      this.formCadMed.resetForm();
+      this.atualizarData()
     } else {
-      if (this.pacienteSelecionado.medicamentos == undefined) {
-        this.pacienteSelecionado.medicamentos = [];
-      }
-      if (this.formMedicamento.valid) {
-        this.pacienteSelecionado.medicamentos.push(this.formMedicamento.value);
-        this.storagePacientes.setPacientes('PACIENTES', this.pacienteSelecionado);
-        this.mensagemCadastro = "Cadastrado com sucesso"
-        this.formCadMed.resetForm();
-        this.atualizarData()
-      } else {
-        this.mensagemCadastro = "Formulario inválido"
-      }
+      this.mensagemCadastro = "Formulario inválido"
+    }
 
-    }
-  }
-  deletar() {
-    let paciente = this.storagePacientes.getPacientes('PACIENTES').find((paciente: any) => paciente.id == this.idPaciente);
-    let validarMedicamento = paciente.medicamentos.find((medicamento: any, index: number) => {
-      if (JSON.stringify(medicamento) === JSON.stringify(this.formMedicamento.value)) {
-        paciente.medicamentos.splice(index, 1);
-      }
-    })
-    this.storagePacientes.setPacientes('PACIENTES', paciente);
-    this.mensagemCadastro = "Excluido com sucesso"
-    this.formCadMed.resetForm();
-  }
-  selecionarPaciente(paciente: any) {
-    this.pacienteSelecionado = paciente
-  }
-  editar() {
-    this.formMedicamento.enable();
-  }
-  limparMensagem() {
-    setTimeout(() => {
-      this.mensagemBusca = '';
-      this.mensagemCadastro = '';
-    }, 2000);
-  }
-  buscaPacientes(valorBuscar: string) {
-    let pacientesBusca = this.carregarPacientes();
-    this.pacienteSelecionado = {}
-    pacientesBusca = this.pacientesLocal.filter((paciente: any) => {
-      if (paciente.nome.toLowerCase().includes(valorBuscar.toLowerCase())) {
-        return true;
-      }
-      return false;
-    });
-    return pacientesBusca;
-  }
 
-  pesquisa(valorBuscar: string) {
-    this.limparMensagem()
-    if (valorBuscar == "") {
-      this.mensagemBusca = "Valor inválido"
-      this.pacientesLocal = [];
-      return;
+}
+deletar() {
+  let paciente = this.storagePacientes.getPacientes('PACIENTES').find((paciente: any) => paciente.id == this.idPaciente);
+  let validarMedicamento = paciente.medicamentos.find((medicamento: any, index: number) => {
+    if (JSON.stringify(medicamento) === JSON.stringify(this.formMedicamento.value)) {
+      paciente.medicamentos.splice(index, 1);
     }
-    this.pacientesLocal = this.buscaPacientes(valorBuscar);
-    if (this.pacientesLocal.length == 0) {
-      this.mensagemBusca = "Nenhum Paciente Encontrado"
+  })
+  this.storagePacientes.setPacientes('PACIENTES', paciente);
+  this.mensagemCadastro = "Excluido com sucesso"
+  this.formCadMed.resetForm();
+}
+selecionarPaciente(paciente: any) {
+  this.pacienteSelecionado = paciente
+  this.formMedicamento.enable()
+}
+editar() {
+  this.formMedicamento.enable();
+}
+limparMensagem() {
+  setTimeout(() => {
+    this.mensagemBusca = '';
+    this.mensagemCadastro = '';
+  }, 2000);
+}
+buscaPacientes(valorBuscar: string) {
+  let pacientesBusca = this.carregarPacientes();
+  console.log(pacientesBusca);
+
+  this.pacienteSelecionado = {}
+  pacientesBusca = this.pacientesLocal.filter((paciente: any) => {
+    if (paciente.nome.toLowerCase().includes(valorBuscar.toLowerCase())) {
+      return true;
     }
+    return false;
+  });
+  return pacientesBusca;
+}
+
+pesquisa(valorBuscar: string) {
+  this.limparMensagem()
+  if (valorBuscar == "") {
+    this.mensagemBusca = "Valor inválido"
+    this.pacientesLocal = [];
+    return;
   }
+  this.pacientesLocal = this.buscaPacientes(valorBuscar);
+  if (this.pacientesLocal.length == 0) {
+    this.mensagemBusca = "Nenhum Paciente Encontrado"
+  }
+}
 }
