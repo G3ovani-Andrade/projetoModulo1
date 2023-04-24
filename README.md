@@ -1,4 +1,8 @@
 <h1 align="center">Medication and Life</h1>
+<div align="center">
+  <img src="https://drive.google.com/file/d/1jkgq1Ojs-fMGvrUG0YBtdrlxChPWVO1K/view?usp=sharing" />
+</div>
+
 
 O projeto foi desenvolvido inicialmente para atender locais com demanda de pacientes que necessitam de administração de medicamentos, manipulação de pacientes cadastrados e gerenciamento de medicamentos receitados, atendendo uma gama variada de clientes, desde clínicas odontológicas até unidades emergenciais. Como upas e hospitais de médio porte.
 
@@ -82,5 +86,5 @@ As técnicas usadas foram diversas, os campos usam ngx-mask, para salvar os dado
     2. Abra uma nova janela do “cmd”
 
     3. Digite o código git clone e adicione o link
-    
+
     4. Repita os passos 7,8,9 e 10 .
