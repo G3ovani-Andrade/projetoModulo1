@@ -1,0 +1,66 @@
+<div class="container w-75 mt-3">
+  <div class="container">
+    <h2>Estatísticas do Sistema</h2>
+    <div class="row mt-4 mb-3">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-4 m-auto">
+        <div class="row justify-content-center mb-3">
+          <div class="col-12 col-sm-4 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-people-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+            </svg>
+          </div>
+          <div class="col-12 col-sm-8 text-center">
+            <p class="mb-0">{{totalPacientes}}</p>
+            <h5>Pacientes</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-4 m-auto">
+        <div class="row justify-content-center">
+          <div class="col-12 col-sm-4 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-capsule"
+              viewBox="0 0 16 16">
+              <path
+                d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429l4.243 4.242Z" />
+            </svg>
+          </div>
+          <div class="col-12 col-sm-8 text-center">
+            <p class="mb-0">{{totalMedicamentos}}</p>
+            <h5>Medicamentos</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- campo Busca -->
+  <div class="container">
+    <h2>Informações rápidas de Pacientes</h2>
+    <app-pesquisa (onClick)="buscar($event)"></app-pesquisa>
+  </div>
+  <!-- Inicio div card pacientes -->
+  <div class="container mt-5 mb-5">
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      <div class="col-12 col-sm-6 col-md-6 col-lg-4" *ngFor="let paciente of pacientesLocal">
+        <div class="card" [routerLink]="['/cadastroPaciente',paciente.id]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" fill="currentColor" class="card-img-top" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+          </svg>
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ paciente.nome[0].toUpperCase() + paciente.nome.substring(1)}}</h5>
+            <p class="card-text">Idade: {{calcularAniversario(paciente.data)}} Anos</p>
+            <p class="card-text">{{ paciente.convenio}}</p>
+            <button type="button" [routerLink]="['/cadastroPaciente',paciente.id]" class="btn btn-primary">Ver Mais</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+</div>
