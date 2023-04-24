@@ -1,6 +1,6 @@
 <h1 align="center">Medication and Life</h1>
 <div align="center">
-  <img src="https://drive.google.com/file/d/1jkgq1Ojs-fMGvrUG0YBtdrlxChPWVO1K/view?usp=sharing" />
+  <video src="https://drive.google.com/file/d/1jkgq1Ojs-fMGvrUG0YBtdrlxChPWVO1K/view?usp=sharing</>
 </div>
 
 
