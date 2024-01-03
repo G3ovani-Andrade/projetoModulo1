@@ -10,7 +10,8 @@ export class StoragePacienteService{
   }
 
 
-  setPacientes(chave: string, paciente: any) {
+  setPacientes(chave: string, paciente: any)
+  {
     let pacientes = this.getPacientes(chave);
     if (paciente.id == null || paciente.id== undefined) {
       this.atualizarId();
